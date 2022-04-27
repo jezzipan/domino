@@ -1,51 +1,27 @@
-
+//Getting the canvas
 const tabuleiro = document.getElementById("canvasTabuleiro")
 const ctx = tabuleiro.getContext("2d")
 
-let l_tabuleiro = tabuleiro.width
-let a_tabuleiro = tabuleiro.height
-let escala_canvas = 1
-let centro_x = l_tabuleiro/2
-let centro_y = a_tabuleiro/2
+//Global variables
+const l_tabuleiro = tabuleiro.width
+const a_tabuleiro = tabuleiro.height
+const centro_x = l_tabuleiro/2
+const centro_y = a_tabuleiro/2
 let l_peca_original = 198
 let a_peca_original = 100
+let escala_canvas = 1
 const reduc = 3
 
-//substituir nome das imagens por variaveis
-// ex: let pathImg = "Imagens/Pecas_teste/"
-// ex: Let extensionImg = ".png"
-// Tentar também fazer as chaves por codigo "key = 6_6
-// Daí, a caminho da peça fica key: URL + key + extensionImg
-
-var imagensPecas = {
-  "66": "Imagens/Pecas_teste/6_6.png",
-  "65": "Imagens/Pecas_teste/6_5.png",
-  "64": "Imagens/Pecas_teste/6_4.png",
-  "63": "Imagens/Pecas_teste/6_3.png",
-  "62": "Imagens/Pecas_teste/6_2.png",
-  "61": "Imagens/Pecas_teste/6_1.png",
-  "60": "Imagens/Pecas_teste/6_0.png",
-  "55": "Imagens/Pecas_teste/5_5.png",
-  "54": "Imagens/Pecas_teste/5_4.png",
-  "53": "Imagens/Pecas_teste/5_3.png",
-  "52": "Imagens/Pecas_teste/5_2.png",
-  "51": "Imagens/Pecas_teste/5_1.png",
-  "50": "Imagens/Pecas_teste/5_0.png",
-  "44": "Imagens/Pecas_teste/4_4.png",
-  "43": "Imagens/Pecas_teste/4_3.png",
-  "42": "Imagens/Pecas_teste/4_2.png",
-  "41": "Imagens/Pecas_teste/4_1.png",
-  "40": "Imagens/Pecas_teste/4_0.png",
-  "33": "Imagens/Pecas_teste/3_3.png",
-  "32": "Imagens/Pecas_teste/3_2.png",
-  "31": "Imagens/Pecas_teste/3_1.png",
-  "30": "Imagens/Pecas_teste/3_0.png",
-  "22": "Imagens/Pecas_teste/2_2.png",
-  "21": "Imagens/Pecas_teste/2_1.png",
-  "20": "Imagens/Pecas_teste/2_0.png",
-  "11": "Imagens/Pecas_teste/1_1.png",
-  "10": "Imagens/Pecas_teste/1_0.png",
-  "00": "Imagens/Pecas_teste/0_0.png"
+//Lista de imagens das Pecas
+let caminhoImagem = "Imagens/Pecas_teste/"
+let extencaoImagem = ".png"
+let imagensPecas = {}
+for (let lado1 = 6; lado1 >= 0; lado1--) {
+  for (let lado2 = lado1; lado2 >= 0; lado2--) {
+    let valorChave = lado1.toString() + lado2.toString()
+    let nomePeca = lado1.toString() + "_" + lado2.toString()
+    imagensPecas[valorChave] = caminhoImagem + nomePeca + extencaoImagem
+  }
 }
 //Conjunto de valores validos de pecas para usuario digitar
 pecasValidas = Object.keys(imagensPecas)
@@ -54,6 +30,7 @@ for (var i = 0; i < nPecas; i++) {
   pecasValidas.push(pecasValidas[i].split("").reverse().join(""))
 }
 
+//Classe principal usada para criar uma cadeia de pecas
 class CadeiaDePecas {
   constructor(){
     this.arrayPecas = []
@@ -77,6 +54,34 @@ class CadeiaDePecas {
       sentidoVert: 0,
       curva: false
     }
+  }
+
+  PrimeiraPeca(numero){
+    this.novaPeca = new Peca(numero)
+    this.arrayPecas.push(this.novaPeca)
+    this.novaPeca.x = centro_x
+    this.novaPeca.y = centro_y
+    this.tamanho = this.arrayPecas.length
+  }
+
+  AdicionaPeca(numero, ponta=1){
+    this.novaPeca = new Peca(numero)
+
+    if (ponta == 1){
+      this.pecaAnterior = this.arrayPecas[0]
+      this.arrayPecas.unshift(this.novaPeca)
+      this.ponta1.tamanho ++
+      if(this.ponta1.sentidoVert != 0) this.novaPeca.Girar90graus()
+      if(this.ponta1.sentidoHoriz == 1) this.novaPeca.Inverter()
+    } else if (ponta == 2){
+      this.pecaAnterior = this.arrayPecas[this.tamanho-1]
+      this.arrayPecas.push(this.novaPeca)
+      this.ponta2.tamanho ++
+      if(this.ponta2.sentidoVert != 0) this.novaPeca.Girar90graus()
+      if(this.ponta2.sentidoHoriz == -1) this.novaPeca.Inverter()
+    }
+
+    this.tamanho = this.arrayPecas.length
   }
 
   AjustaCadeia(){
@@ -112,7 +117,7 @@ class CadeiaDePecas {
       }
     }
 
-    //Curva para direita se chegar perto do parte de cima do canvas.
+    //Curva para direita se chegar perto do lado de cima do canvas.
     //Se houver pecas transversais, nao curva e reduz o zoom.
     if(this.ponta1.tamanho > 8 && this.ponta1.sentidoVert == -1 && this.ponta1.curva == false){
       if (this.novaPeca.vertical==true && this.pecaAnterior.vertical==true){
@@ -137,34 +142,7 @@ class CadeiaDePecas {
     }
 
   }
-
-  PrimeiraPeca(numero){
-    this.novaPeca = new Peca(numero)
-    this.arrayPecas.push(this.novaPeca)
-    this.novaPeca.x = centro_x
-    this.novaPeca.y = centro_y
-    this.tamanho = this.arrayPecas.length
-  }
-
-  AdicionaPeca(numero, ponta=1){
-    this.novaPeca = new Peca(numero)
-
-    if (ponta == 1){
-      this.pecaAnterior = this.arrayPecas[0]
-      this.arrayPecas.unshift(this.novaPeca)
-      this.ponta1.tamanho ++
-      if(this.ponta1.sentidoVert != 0) this.novaPeca.Girar90graus()
-      if(this.ponta1.sentidoHoriz == 1) this.novaPeca.Inverter()
-    } else if (ponta == 2){
-      this.pecaAnterior = this.arrayPecas[this.tamanho-1]
-      this.arrayPecas.push(this.novaPeca)
-      this.ponta2.tamanho ++
-      if(this.ponta2.sentidoVert != 0) this.novaPeca.Girar90graus()
-      if(this.ponta2.sentidoHoriz == -1) this.novaPeca.Inverter()
-    }
-
-    this.tamanho = this.arrayPecas.length
-  }
+  
 
   AtualizaCoordenadasNovaPeca(ponta=1){
     let sentidoHoriz
@@ -242,7 +220,7 @@ class Peca {
 
     if(this.lado1 < this.lado2){
       this.invertida = true
-      this.numero = parseInt(this.numero.split("").reverse().join(""))
+      this.numero = this.numero.split("").reverse().join("")
     }
   }
 
@@ -359,6 +337,7 @@ function zoomOut(escala=.8){
 }
 
 function limpaCanvas(){
+
   let nova_largura = tabuleiro.width*escala_canvas
   let nova_altura = tabuleiro.height*escala_canvas
   let sobra_largura = nova_largura - l_tabuleiro
@@ -367,4 +346,5 @@ function limpaCanvas(){
   ctx.translate(-sobra_largura/2,-sobra_altura/2)
   ctx.clearRect(0,0,nova_largura,nova_altura)
   ctx.translate(sobra_largura/2,sobra_altura/2)
+
 }
