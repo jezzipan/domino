@@ -142,7 +142,7 @@ class CadeiaDePecas {
     }
 
   }
-  
+
 
   AtualizaCoordenadasNovaPeca(ponta=1){
     let sentidoHoriz
@@ -193,9 +193,62 @@ class CadeiaDePecas {
 
   MostrarCadeia(){
     if (this.arrayPecas[0]){
-      mostrarPecas(this.arrayPecas,this.tamanho,0)
+      this.MostrarCadaPeca(0)
     } else {
       alert("Cadeia vazia")
+    }
+  }
+
+  MostrarCadaPeca(i=0){
+
+    if (i < this.tamanho){
+      let pecaImg = new Image()
+      let pecaObj = this.arrayPecas[i]
+      let img_x = pecaObj.x
+      let img_y = pecaObj.y
+      let numeroImg  = pecaObj.numero
+      pecaImg.src = imagensPecas[numeroImg]
+      let l_imgNoCanvas
+      let a_imgNoCanvas
+      let invert
+
+      pecaImg.addEventListener("load",()=>{
+        //Esse eventlistener junto com a funcao recursiva abaixo
+        //garante que cada peca soh eh processada e mostrarda
+        //apos a peca anterior
+
+        ctx.save()
+        ctx.translate(img_x,img_y)
+
+        //Ajuste dos parametros caso a imagem seja vartical
+        if(pecaObj.vertical){
+          ctx.rotate(Math.PI/2)
+          l_imgNoCanvas = pecaObj.alt
+          a_imgNoCanvas = pecaObj.larg
+        } else {
+          l_imgNoCanvas = pecaObj.larg
+          a_imgNoCanvas = pecaObj.alt
+        }
+
+        //Ajuste dos parametros caso a imagem seja invertida
+        if(pecaObj.invertida) {
+          ctx.scale(-1,1)
+          invert = 1
+        } else {
+          invert = -1
+        }
+
+        //Desenho da imagem no canvas e reset dos parametros
+        ctx.drawImage(pecaImg,
+          invert*l_imgNoCanvas/2,-a_imgNoCanvas/2,
+          -invert*l_imgNoCanvas,a_imgNoCanvas)
+        ctx.translate(-img_x,-img_y)
+        ctx.restore()
+
+        //Recursividade da funcao
+        this.MostrarCadaPeca(i+1)
+
+      })
     }
   }
 
@@ -237,57 +290,6 @@ class Peca {
 
 }
 
-function mostrarPecas(arrayPecas,tamanho,i){
-
-  if (i < tamanho){
-    let pecaImg = new Image()
-    let pecaObj = arrayPecas[i]
-    let img_x = pecaObj.x
-    let img_y = pecaObj.y
-    let numeroImg  = pecaObj.numero
-    pecaImg.src = imagensPecas[numeroImg]
-    let l_imgNpCanvas
-    let a_imgNoCanvas
-    let invert
-
-
-    pecaImg.addEventListener("load",()=>{
-      //Esse eventlistener junto com a funcao recursiva abaixo
-      //garante que cada peca soh eh processada e mostrarda
-      //apos a peca anterior
-
-      ctx.save()
-      ctx.translate(img_x,img_y)
-
-      if(pecaObj.vertical){
-        ctx.rotate(Math.PI/2)
-        l_imgNpCanvas = pecaObj.alt
-        a_imgNoCanvas = pecaObj.larg
-      } else {
-        l_imgNpCanvas = pecaObj.larg
-        a_imgNoCanvas = pecaObj.alt
-      }
-
-      if(pecaObj.invertida) {
-        ctx.scale(-1,1)
-        invert = 1
-      } else {
-        invert = -1
-      }
-
-      ctx.drawImage(pecaImg,
-        invert*l_imgNpCanvas/2,-a_imgNoCanvas/2,
-        -invert*l_imgNpCanvas,a_imgNoCanvas)
-      ctx.translate(-img_x,-img_y)
-      ctx.restore()
-
-      mostrarPecas(arrayPecas,tamanho,i+1)
-      //recursividade da funcao
-
-    })
-  }
-
-}
 
 function checarInput(pontaEscolhida,numeroEscolhido){
   if(pontaEscolhida!=1 && pontaEscolhida!=2){
