@@ -2,6 +2,28 @@
 const tabuleiro = document.getElementById("canvasTabuleiro")
 const ctx = tabuleiro.getContext("2d")
 
+//   // Click and drag
+// var rect1x = rec1y;
+// var a = b;
+
+// function mouseDown(){ 
+//   a = document.getElementById("canvasTabuleiro").getBoundingClientRect().left;
+//   b = document.getElementById("canvasTabuleiro").getBoundingClientRect().top;
+//   rect1x = window.event.clientX - a;
+//   rect1y = window.event.clientY - b;
+// }
+
+// function mouseUp(){
+//   var rect2x = window.event.clientX - a;
+//   var rect2y = window.event.clientY - b;
+
+//   // var c=document.getElementById("canvasTabuleiro");
+//   // var ctx=c.getContext("2d");
+//   // ctx.fillStyle="#FF0000";
+//   ctx.fillRect(rect1x, rect1y, rect2x - rect1x, rect2y - rect1y);
+// }
+
+
 //Global variables
 const l_tabuleiro = tabuleiro.width
 const a_tabuleiro = tabuleiro.height
@@ -11,6 +33,7 @@ let l_peca_original = 198
 let a_peca_original = 100
 let escala_canvas = 1
 const reduc = 3
+
 
 //Lista de imagens das Pecas
 let caminhoImagem = "Imagens/Pecas_teste/"
@@ -337,6 +360,53 @@ function zoomOut(escala=.8){
   escala_canvas /= escala
 
 }
+
+function zoomIn(escala=1.2){
+
+  ctx.translate(centro_x,centro_y)
+  ctx.scale(escala,escala)
+  ctx.translate(-centro_x,-centro_y)
+  escala_canvas *= escala
+
+}
+
+function refresh(){
+  limpaCanvas()
+  cadeiaPecas.AjustaCadeia()
+  cadeiaPecas.MostrarCadeia()
+}
+
+function moveUp(){
+// shift everything to the left:
+  var imageData = ctx.getImageData(1, 0, ctx.canvas.width-1, ctx.canvas.height);
+  ctx.putImageData(imageData, 0, 0);
+  // now clear the right-most pixels:
+  ctx.clearRect(ctx.canvas.width-1, 0, 1, ctx.canvas.height);
+}
+
+// function moveDown(){
+  
+// }
+
+// function moveLeft(){
+// // shift everything to the left:
+// var imageData = context.getImageData(1, 0, context.canvas.width-1, context.canvas.height);
+// context.putImageData(imageData, 0, 0);
+// // now clear the right-most pixels:
+// context.clearRect(context.canvas.width-1, 0, 1, context.canvas.height);
+// }
+
+// function moveRight(){
+  
+// }
+
+const botaoCor = document.getElementById("botaoCor");
+
+botaoCor.addEventListener("click", function onClick(event){
+  const box = document.getElementById("canvasTabuleiro");
+  box.style.backgroundColor = "coral";
+});
+
 
 function limpaCanvas(){
 
