@@ -41,62 +41,80 @@ class InterfaceCanvas {
     this.centro_y = this.a_canvasObj/2
   }
 
-  MostrarPecas(){
+  MostrarPecaNova(){
+    let pecaImg = new Image()
+    let pecaObj = this.cadeiaDePecas.novaPeca
+    let numeroImg  = pecaObj.numero
+    pecaImg.src = imagensPecas[numeroImg]
+
+    pecaImg.addEventListener("load",()=>{
+      this.MostrarUmaPeca(pecaImg,pecaObj)
+    })
+  }
+
+  MostrarTodasPecas(){
     if (this.cadeiaDePecas.arrayPecas[0]){
-      this.MostrarCadaPeca(0)
+      this.MostrarRecursivo(0)
     } else {
       alert("Cadeia vazia")
     }
   }
 
-  MostrarCadaPeca(i=0){
+  MostrarUmaPeca(pecaImg,pecaObj){
+
+    let img_x = pecaObj.x
+    let img_y = pecaObj.y
+    let l_imgNoCanvas
+    let a_imgNoCanvas
+    let invert
+
+    //Salva os parametros do canvas
+    this.ctx.save()
+    this.ctx.translate(img_x,img_y)
+
+    //Ajuste dos parametros caso a imagem seja vartical
+    if(pecaObj.vertical){
+      this.ctx.rotate(Math.PI/2)
+      l_imgNoCanvas = pecaObj.alt
+      a_imgNoCanvas = pecaObj.larg
+    } else {
+      l_imgNoCanvas = pecaObj.larg
+      a_imgNoCanvas = pecaObj.alt
+    }
+
+    //Ajuste dos parametros caso a imagem seja invertida
+    if(pecaObj.invertida) {
+      this.ctx.scale(-1,1)
+      invert = 1
+    } else {
+      invert = -1
+    }
+
+    //Desenho da imagem no canvas e reset dos parametros
+    this.ctx.drawImage(pecaImg,
+      invert*l_imgNoCanvas/2,-a_imgNoCanvas/2,
+      -invert*l_imgNoCanvas,a_imgNoCanvas)
+    this.ctx.translate(-img_x,-img_y)
+    this.ctx.restore()
+  }
+
+  MostrarRecursivo(i=0){
 
     if (i < this.cadeiaDePecas.tamanho){
       let pecaImg = new Image()
       let pecaObj = this.cadeiaDePecas.arrayPecas[i]
-      let img_x = pecaObj.x
-      let img_y = pecaObj.y
       let numeroImg  = pecaObj.numero
       pecaImg.src = imagensPecas[numeroImg]
-      let l_imgNoCanvas
-      let a_imgNoCanvas
-      let invert
 
       pecaImg.addEventListener("load",()=>{
         //Esse eventlistener junto com a funcao recursiva abaixo
         //garante que cada peca soh eh processada e mostrarda
         //apos a peca anterior
 
-        this.ctx.save()
-        this.ctx.translate(img_x,img_y)
-
-        //Ajuste dos parametros caso a imagem seja vartical
-        if(pecaObj.vertical){
-          this.ctx.rotate(Math.PI/2)
-          l_imgNoCanvas = pecaObj.alt
-          a_imgNoCanvas = pecaObj.larg
-        } else {
-          l_imgNoCanvas = pecaObj.larg
-          a_imgNoCanvas = pecaObj.alt
-        }
-
-        //Ajuste dos parametros caso a imagem seja invertida
-        if(pecaObj.invertida) {
-          this.ctx.scale(-1,1)
-          invert = 1
-        } else {
-          invert = -1
-        }
-
-        //Desenho da imagem no canvas e reset dos parametros
-        this.ctx.drawImage(pecaImg,
-          invert*l_imgNoCanvas/2,-a_imgNoCanvas/2,
-          -invert*l_imgNoCanvas,a_imgNoCanvas)
-        this.ctx.translate(-img_x,-img_y)
-        this.ctx.restore()
+        this.MostrarUmaPeca(pecaImg,pecaObj)
 
         //Recursividade da funcao
-        this.MostrarCadaPeca(i+1)
+        this.MostrarRecursivo(i+1)
 
       })
     }
@@ -124,43 +142,41 @@ class InterfaceCanvas {
       return
     }
 
-    this.LimpaCanvas()
+    //this.LimpaCanvas()
 
     if(this.cadeiaDePecas.tamanho==0){
       this.cadeiaDePecas.PrimeiraPeca(numeroEscolhido,this.centro_x,this.centro_y)
     } else {
       this.cadeiaDePecas.AdicionaPeca(numeroEscolhido, pontaEscolhida)
       this.cadeiaDePecas.AjustaCadeia()
-      this.LimpaCanvas()
+      //this.LimpaCanvas()
       this.cadeiaDePecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
     }
 
-    this.MostrarPecas()
-
-  }
-
-  ZoomOut(escala=.8){
-
-    this.ctx.translate(this.centro_x,this.centro_y)
-    this.ctx.scale(escala,escala)
-    this.ctx.translate(-this.centro_x,-this.centro_y)
-    escala_canvas /= escala
-
-  }
-
-  ZoomIn(escala=1.2){
-
-    this.ctx.translate(this.centro_x,this.centro_y)
-    this.ctx.scale(escala,escala)
-    this.ctx.translate(-this.centro_x,-this.centro_y)
-    escala_canvas *= escala
+    this.MostrarPecaNova()
 
   }
 
   Refresh(){
     this.LimpaCanvas()
     this.cadeiaDePecas.AjustaCadeia()
-    this.MostrarPecas()
+    this.MostrarTodasPecas()
+  }
+
+  ZoomOut(escala=.8){
+    this.ctx.translate(this.centro_x,this.centro_y)
+    this.ctx.scale(escala,escala)
+    this.ctx.translate(-this.centro_x,-this.centro_y)
+    escala_canvas /= escala
+    this.Refresh()
+  }
+
+  ZoomIn(escala=1.2){
+    this.ctx.translate(this.centro_x,this.centro_y)
+    this.ctx.scale(escala,escala)
+    this.ctx.translate(-this.centro_x,-this.centro_y)
+    escala_canvas *= escala
+    this.Refresh()
   }
 
   MoveUp(){
@@ -169,6 +185,7 @@ class InterfaceCanvas {
     this.ctx.putImageData(imageData, 0, 0);
     // now clear the right-most pixels:
     this.ctx.clearRect(this.ctx.canvas.width-1, 0, 1, this.ctx.canvas.height);
+    this.Refresh()
   }
 
 }

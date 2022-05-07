@@ -19,9 +19,9 @@
     <div classe="container">
       <!-- Botoes de zoom -->
       <menu id="canvasControl">
-        <button id="zoomButton" onclick="uiTabuleiro.ZoomIn(1.2);uiTabuleiro.Refresh();"><b>+</b></button>
+        <button id="zoomButton" onclick="uiTabuleiro.ZoomIn(1.2);"><b>+</b></button>
       </br>
-        <button id="zoomButton" onclick="uiTabuleiro.ZoomOut(0.8);uiTabuleiro.Refresh();"><b>-</b></button>
+        <button id="zoomButton" onclick="uiTabuleiro.ZoomOut(0.8);"><b>-</b></button>
       </menu>
 
       <!-- Canvas principal -->
@@ -46,7 +46,7 @@
     <div>
       <menu id="moveCanvas" style="z-index:4;position:absolute;top:1;left:1;">
         <button id="moveButton" style="top:-340px;left:10px;"><</button>
-        <button id="moveButton" onclick="uiTabuleiro.MoveUp();uiTabuleiro.Refresh();" style="top:-500px;left:380px;">^</button>
+        <button id="moveButton" onclick="uiTabuleiro.MoveUp();" style="top:-500px;left:380px;">^</button>
         <button id="moveButton" style="top:-168px;left:380px;">v</button>
         <button id="moveButton" style="top:-340px;left:770px;">></button>
       </menu>
