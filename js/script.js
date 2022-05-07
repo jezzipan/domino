@@ -52,14 +52,6 @@ class InterfaceCanvas {
     })
   }
 
-  MostrarTodasPecas(){
-    if (this.cadeiaDePecas.arrayPecas[0]){
-      this.MostrarRecursivo(0)
-    } else {
-      alert("Cadeia vazia")
-    }
-  }
-
   MostrarUmaPeca(pecaImg,pecaObj){
 
     let img_x = pecaObj.x
@@ -96,6 +88,14 @@ class InterfaceCanvas {
       -invert*l_imgNoCanvas,a_imgNoCanvas)
     this.ctx.translate(-img_x,-img_y)
     this.ctx.restore()
+  }
+
+  MostrarTodasPecas(){
+    if (this.cadeiaDePecas.arrayPecas[0]){ //Se cadeia nao vazia
+      this.MostrarRecursivo(0)
+    } else {
+      alert("Cadeia vazia")
+    }
   }
 
   MostrarRecursivo(i=0){
