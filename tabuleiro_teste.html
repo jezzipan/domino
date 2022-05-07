@@ -7,11 +7,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   </head>
   <body>
+    <div>
+      <menu id="canvasControl" style="z-index:2;position:absolute;top:1;left:720px;align-self:right">
+        <button onclick="zoomIn(1.2);refresh();" style="width:25px;height:25px;"><b>+</b></button>
+      </br>
+        <button onclick="zoomOut(0.8);refresh();" style="width:25px;height:25px;"><b>-</b></button>
+      </menu>
 
-    <canvas id="canvasTabuleiro" width="800" height="400" style="border: 1px solid #000">
-      <h3>Navegador não possui suporte ao canvas</h3>
-      <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
-    </canvas>
+      <canvas id="canvasTabuleiro" width="800" height="600" style="border: 1px solid #000;z-index:1" >
+        <h3>Navegador não possui suporte ao canvas</h3>
+        <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
+      </canvas>
+    </div>
+
+    <div>
+      <menu id="colors" style="z-index:3;position:absolute;top:10px;left:-10px;">
+        <button id="botaoCor">Temas</button>
+      </menu>
+    </div>
+
+    <!-- Botões de movimentação da tela -->
+    <div>
+      <menu id="moveCanvas" style="z-index:4;position:absolute;top:1;left:1;">
+        <button style="width:25px;height:25px;position:absolute;top:-325px;left:10px;align-self:right"><</button>
+        <button onclick="moveUp();refresh();" style="width:25px;height:25px;position:absolute;top:-600px;left:380px;align-self:right">^</button>
+        <button style="width:25px;height:25px;position:absolute;top:-68px;left:380px;align-self:right">v</button>
+        <button style="width:25px;height:25px;position:absolute;top:-325px;left:770px;align-self:right">></button>
+      </menu>
+    </div>
+
 
     <p>"Digite o numero da peça ex: 66"</p>
     <input type="text" id="pecaJogador" value="">

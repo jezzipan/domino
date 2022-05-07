@@ -5,3 +5,6 @@ body {
 #canvasTabuleiro {
 
 }
+canvas {
+  background-color: lightgrey;
+}
