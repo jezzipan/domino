@@ -19,9 +19,9 @@ let a_peca = a_peca_original/reducao
 
 //Lista de imagens das Pecas
 let caminhoImagem = "Imagens/Pecas_teste/"
-//let caminhoImagem = "Imagens/Pecas_B/"
-//let caminhoImagem = "Imagens/Pecas_C/"
-//let caminhoImagem = "Imagens/Pecas_D/"
+//let caminhoImagem = "Imagens/Pecas_B/B_"
+//let caminhoImagem = "Imagens/Pecas_C/C_"
+//let caminhoImagem = "Imagens/Pecas_D/D_"
 let extencaoImagem = ".png"
 let imagensPecas = {}
 for (let lado1 = 6; lado1 >= 0; lado1--) {
@@ -139,7 +139,7 @@ class CadeiaDePecas {
 
     //Curva para esquerda se chegar perto do parte de baixo do canvas.
     //Se houver pecas transversais, nao curva e reduz o zoom.
-    if(this.ponta2.tamanho > 8 && this.ponta2.sentidoVert == 1 && this.ponta2.curva == false){
+    if(this.ponta2.tamanho > 9 && this.ponta2.sentidoVert == 1 && this.ponta2.curva == false){
       if (this.novaPeca.vertical==true && this.pecaAnterior.vertical==true){
         this.ponta2.sentidoHoriz = -1
         this.ponta2.sentidoVert = 0
