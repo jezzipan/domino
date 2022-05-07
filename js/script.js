@@ -1,8 +1,11 @@
-//Getting the canvas
+//import from './metodos.js'
+
+
+//Criando o canvas
 const tabuleiro = document.getElementById("canvasTabuleiro")
 const ctx = tabuleiro.getContext("2d")
 
-//Global variables
+//Variaveis globais
 const l_tabuleiro = tabuleiro.width
 const a_tabuleiro = tabuleiro.height
 const centro_x = l_tabuleiro/2
@@ -10,10 +13,15 @@ const centro_y = a_tabuleiro/2
 let l_peca_original = 198
 let a_peca_original = 100
 let escala_canvas = 1
-const reduc = 3
+const reducao = 3
+let l_peca = l_peca_original/reducao
+let a_peca = a_peca_original/reducao
 
 //Lista de imagens das Pecas
 let caminhoImagem = "Imagens/Pecas_teste/"
+//let caminhoImagem = "Imagens/Pecas_B/"
+//let caminhoImagem = "Imagens/Pecas_C/"
+//let caminhoImagem = "Imagens/Pecas_D/"
 let extencaoImagem = ".png"
 let imagensPecas = {}
 for (let lado1 = 6; lado1 >= 0; lado1--) {
@@ -94,7 +102,7 @@ class CadeiaDePecas {
 
     //Curva para cima se tem muitas pecas na esquerda.
     //Se houver pecas transversais, nao curva e reduz o zoom.
-    if(this.ponta1.tamanho > 5 && this.ponta1.sentidoHoriz == -1 && this.ponta1.curva == false){
+    if(this.ponta1.tamanho > 6 && this.ponta1.sentidoHoriz == -1 && this.ponta1.curva == false){
       if (this.novaPeca.vertical==false && this.pecaAnterior.vertical==false){
         this.ponta1.sentidoHoriz = 0
         this.ponta1.sentidoVert = -1
@@ -106,7 +114,7 @@ class CadeiaDePecas {
 
     //Curva para baixo se tem muitas pecas na direita
     //Se houver pecas transversais, nao curva e reduz o zoom.
-    if(this.ponta2.tamanho  > 5 && this.ponta2.sentidoHoriz == 1 && this.ponta2.curva == false){
+    if(this.ponta2.tamanho  > 6 && this.ponta2.sentidoHoriz == 1 && this.ponta2.curva == false){
       if (this.novaPeca.vertical==false && this.pecaAnterior.vertical==false){
         //curva para baixo
         this.ponta2.sentidoHoriz = 0
@@ -119,7 +127,7 @@ class CadeiaDePecas {
 
     //Curva para direita se chegar perto do lado de cima do canvas.
     //Se houver pecas transversais, nao curva e reduz o zoom.
-    if(this.ponta1.tamanho > 8 && this.ponta1.sentidoVert == -1 && this.ponta1.curva == false){
+    if(this.ponta1.tamanho > 9 && this.ponta1.sentidoVert == -1 && this.ponta1.curva == false){
       if (this.novaPeca.vertical==true && this.pecaAnterior.vertical==true){
         this.ponta1.sentidoHoriz = 1
         this.ponta1.sentidoVert = 0
@@ -261,8 +269,8 @@ class Peca {
     this.invertida = false
     this.lado1 = parseInt(numero.charAt(0))
     this.lado2 = parseInt(numero.charAt(1))
-    this.larg = l_peca_original/reduc
-    this.alt = a_peca_original/reduc
+    this.larg = l_peca
+    this.alt = a_peca
 
     if(this.lado1 == this.lado2){
       this.vertical = true
@@ -290,6 +298,7 @@ class Peca {
 
 }
 
+let cadeiaPecas = new CadeiaDePecas()
 
 function checarInput(pontaEscolhida,numeroEscolhido){
   if(pontaEscolhida!=1 && pontaEscolhida!=2){
@@ -302,8 +311,6 @@ function checarInput(pontaEscolhida,numeroEscolhido){
     return "erro"
   }
 }
-
-let cadeiaPecas = new CadeiaDePecas()
 
 function atualizaTabuleiro(){
 
