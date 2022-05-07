@@ -3,8 +3,27 @@ body {
 }
 
 #canvasTabuleiro {
-
-}
-canvas {
   background-color: lightgrey;
+  border: 1px solid #000;
+  z-index: 1;
+}
+
+#canvasControl {
+  z-index:2;
+  position:absolute;
+  top:1;
+  left:720px;
+  align-self:right;
+}
+
+#zoomButton{
+  width:25px;
+  height:25px;
+}
+
+#moveButton{
+  width:25px;
+  height:25px;
+  position:absolute;
+  align-self:right;
 }
