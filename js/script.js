@@ -1,15 +1,17 @@
 //import from './metodos.js'
 
 
-//Criando o canvas
-const tabuleiro = document.getElementById("canvasTabuleiro")
-const ctx = tabuleiro.getContext("2d")
+//Criando os canvas do jogador, do oponente e do tabuleiro central
+const canvasTabuleiroJS = document.getElementById("canvasTabuleiro")
+const canvasJogadorJS = document.getElementById("canvasJogador")
+const canvasOponeteJS = document.getElementById("canvasOponente")
+
 
 //   // Click and drag
 // var rect1x = rec1y;
 // var a = b;
 
-// function mouseDown(){ 
+// function mouseDown(){
 //   a = document.getElementById("canvasTabuleiro").getBoundingClientRect().left;
 //   b = document.getElementById("canvasTabuleiro").getBoundingClientRect().top;
 //   rect1x = window.event.clientX - a;
@@ -26,19 +28,158 @@ const ctx = tabuleiro.getContext("2d")
 //   ctx.fillRect(rect1x, rect1y, rect2x - rect1x, rect2y - rect1y);
 // }
 
+class InterfaceCanvas {
+
+  constructor(canvasJS,cadeiaDePecas){
+    this.cadeiaDePecas = cadeiaDePecas
+    this.canvasObj = canvasJS
+
+    this.ctx = this.canvasObj.getContext("2d")
+    this.l_canvasObj = this.canvasObj.width
+    this.a_canvasObj = this.canvasObj.height
+    this.centro_x = this.l_canvasObj/2
+    this.centro_y = this.a_canvasObj/2
+  }
+
+  MostrarPecas(){
+    if (this.cadeiaDePecas.arrayPecas[0]){
+      this.MostrarCadaPeca(0)
+    } else {
+      alert("Cadeia vazia")
+    }
+  }
+
+  MostrarCadaPeca(i=0){
+
+    if (i < this.cadeiaDePecas.tamanho){
+      let pecaImg = new Image()
+      let pecaObj = this.cadeiaDePecas.arrayPecas[i]
+      let img_x = pecaObj.x
+      let img_y = pecaObj.y
+      let numeroImg  = pecaObj.numero
+      pecaImg.src = imagensPecas[numeroImg]
+      let l_imgNoCanvas
+      let a_imgNoCanvas
+      let invert
+
+      pecaImg.addEventListener("load",()=>{
+        //Esse eventlistener junto com a funcao recursiva abaixo
+        //garante que cada peca soh eh processada e mostrarda
+        //apos a peca anterior
+
+        this.ctx.save()
+        this.ctx.translate(img_x,img_y)
+
+        //Ajuste dos parametros caso a imagem seja vartical
+        if(pecaObj.vertical){
+          this.ctx.rotate(Math.PI/2)
+          l_imgNoCanvas = pecaObj.alt
+          a_imgNoCanvas = pecaObj.larg
+        } else {
+          l_imgNoCanvas = pecaObj.larg
+          a_imgNoCanvas = pecaObj.alt
+        }
+
+        //Ajuste dos parametros caso a imagem seja invertida
+        if(pecaObj.invertida) {
+          this.ctx.scale(-1,1)
+          invert = 1
+        } else {
+          invert = -1
+        }
+
+        //Desenho da imagem no canvas e reset dos parametros
+        this.ctx.drawImage(pecaImg,
+          invert*l_imgNoCanvas/2,-a_imgNoCanvas/2,
+          -invert*l_imgNoCanvas,a_imgNoCanvas)
+        this.ctx.translate(-img_x,-img_y)
+        this.ctx.restore()
+
+        //Recursividade da funcao
+        this.MostrarCadaPeca(i+1)
+
+      })
+    }
+  }
+
+  LimpaCanvas(){
+
+    let nova_largura = this.canvasObj.width*escala_canvas
+    let nova_altura = this.canvasObj.height*escala_canvas
+    let sobra_largura = nova_largura - this.l_canvasObj
+    let sobra_altura = nova_altura - this.a_canvasObj
+
+    this.ctx.translate(-sobra_largura/2,-sobra_altura/2)
+    this.ctx.clearRect(0,0,nova_largura,nova_altura)
+    this.ctx.translate(sobra_largura/2,sobra_altura/2)
+
+  }
+
+  AtualizaCanvas(){
+
+    let numeroEscolhido = document.getElementById("pecaJogador").value
+    let pontaEscolhida = document.getElementById("pontaJogador").value
+
+    if(checarInput(pontaEscolhida,numeroEscolhido)=="erro"){
+      return
+    }
+
+    this.LimpaCanvas()
+
+    if(this.cadeiaDePecas.tamanho==0){
+      this.cadeiaDePecas.PrimeiraPeca(numeroEscolhido,this.centro_x,this.centro_y)
+    } else {
+      this.cadeiaDePecas.AdicionaPeca(numeroEscolhido, pontaEscolhida)
+      this.cadeiaDePecas.AjustaCadeia()
+      this.LimpaCanvas()
+      this.cadeiaDePecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
+    }
+
+    this.MostrarPecas()
+
+  }
+
+  ZoomOut(escala=.8){
+
+    this.ctx.translate(this.centro_x,this.centro_y)
+    this.ctx.scale(escala,escala)
+    this.ctx.translate(-this.centro_x,-this.centro_y)
+    escala_canvas /= escala
+
+  }
+
+  ZoomIn(escala=1.2){
+
+    this.ctx.translate(this.centro_x,this.centro_y)
+    this.ctx.scale(escala,escala)
+    this.ctx.translate(-this.centro_x,-this.centro_y)
+    escala_canvas *= escala
+
+  }
+
+  Refresh(){
+    this.LimpaCanvas()
+    this.cadeiaDePecas.AjustaCadeia()
+    this.MostrarPecas()
+  }
+
+  MoveUp(){
+  // shift everything to the left:
+    var imageData = this.ctx.getImageData(1, 0, this.ctx.canvas.width-1, this.ctx.canvas.height);
+    this.ctx.putImageData(imageData, 0, 0);
+    // now clear the right-most pixels:
+    this.ctx.clearRect(this.ctx.canvas.width-1, 0, 1, this.ctx.canvas.height);
+  }
+
+}
 
 //Variaveis globais
-const l_tabuleiro = tabuleiro.width
-const a_tabuleiro = tabuleiro.height
-const centro_x = l_tabuleiro/2
-const centro_y = a_tabuleiro/2
-let l_peca_original = 198
-let a_peca_original = 100
-let escala_canvas = 1
+const l_peca_original = 198
+const a_peca_original = 100
 const reducao = 3
 let l_peca = l_peca_original/reducao
 let a_peca = a_peca_original/reducao
-
+let escala_canvas = 1
 
 //Lista de imagens das Pecas
 let caminhoImagem = "Imagens/Pecas_teste/"
@@ -87,7 +228,7 @@ class CadeiaDePecas {
     }
   }
 
-  PrimeiraPeca(numero){
+  PrimeiraPeca(numero,centro_x,centro_y){
     this.novaPeca = new Peca(numero)
     this.arrayPecas.push(this.novaPeca)
     this.novaPeca.x = centro_x
@@ -117,11 +258,11 @@ class CadeiaDePecas {
 
   AjustaCadeia(){
 
-    if(this.semZoom &&
-      (this.ponta1.tamanho > 4 || this.ponta2.tamanho > 4)){
-      zoomOut()
-      this.semZoom = false
-    }
+    // if(this.semZoom &&
+    //   (this.ponta1.tamanho > 4 || this.ponta2.tamanho > 4)){
+    //   zoomOut()
+    //   this.semZoom = false
+    // }
 
     //Curva para cima se tem muitas pecas na esquerda.
     //Se houver pecas transversais, nao curva e reduz o zoom.
@@ -130,9 +271,10 @@ class CadeiaDePecas {
         this.ponta1.sentidoHoriz = 0
         this.ponta1.sentidoVert = -1
         this.ponta1.curva = true
-      } else {
-        zoomOut(0.9)
       }
+      // else {
+      //   zoomOut(0.9)
+      // }
     }
 
     //Curva para baixo se tem muitas pecas na direita
@@ -143,9 +285,10 @@ class CadeiaDePecas {
         this.ponta2.sentidoHoriz = 0
         this.ponta2.sentidoVert = 1
         this.ponta2.curva = true
-      } else {
-        zoomOut(0.9)
       }
+      // else {
+      //   zoomOut(0.9)
+      // }
     }
 
     //Curva para direita se chegar perto do lado de cima do canvas.
@@ -155,9 +298,10 @@ class CadeiaDePecas {
         this.ponta1.sentidoHoriz = 1
         this.ponta1.sentidoVert = 0
         this.ponta1.curva = true
-      } else {
-        zoomOut(0.9)
       }
+      // else {
+      //   zoomOut(0.9)
+      // }
     }
 
     //Curva para esquerda se chegar perto do parte de baixo do canvas.
@@ -167,9 +311,10 @@ class CadeiaDePecas {
         this.ponta2.sentidoHoriz = -1
         this.ponta2.sentidoVert = 0
         this.ponta2.curva = true
-      } else {
-        zoomOut(0.9)
       }
+      // else {
+      //   zoomOut(0.9)
+      // }
     }
 
   }
@@ -222,67 +367,6 @@ class CadeiaDePecas {
 
   }
 
-  MostrarCadeia(){
-    if (this.arrayPecas[0]){
-      this.MostrarCadaPeca(0)
-    } else {
-      alert("Cadeia vazia")
-    }
-  }
-
-  MostrarCadaPeca(i=0){
-
-    if (i < this.tamanho){
-      let pecaImg = new Image()
-      let pecaObj = this.arrayPecas[i]
-      let img_x = pecaObj.x
-      let img_y = pecaObj.y
-      let numeroImg  = pecaObj.numero
-      pecaImg.src = imagensPecas[numeroImg]
-      let l_imgNoCanvas
-      let a_imgNoCanvas
-      let invert
-
-      pecaImg.addEventListener("load",()=>{
-        //Esse eventlistener junto com a funcao recursiva abaixo
-        //garante que cada peca soh eh processada e mostrarda
-        //apos a peca anterior
-
-        ctx.save()
-        ctx.translate(img_x,img_y)
-
-        //Ajuste dos parametros caso a imagem seja vartical
-        if(pecaObj.vertical){
-          ctx.rotate(Math.PI/2)
-          l_imgNoCanvas = pecaObj.alt
-          a_imgNoCanvas = pecaObj.larg
-        } else {
-          l_imgNoCanvas = pecaObj.larg
-          a_imgNoCanvas = pecaObj.alt
-        }
-
-        //Ajuste dos parametros caso a imagem seja invertida
-        if(pecaObj.invertida) {
-          ctx.scale(-1,1)
-          invert = 1
-        } else {
-          invert = -1
-        }
-
-        //Desenho da imagem no canvas e reset dos parametros
-        ctx.drawImage(pecaImg,
-          invert*l_imgNoCanvas/2,-a_imgNoCanvas/2,
-          -invert*l_imgNoCanvas,a_imgNoCanvas)
-        ctx.translate(-img_x,-img_y)
-        ctx.restore()
-
-        //Recursividade da funcao
-        this.MostrarCadaPeca(i+1)
-
-      })
-    }
-  }
-
 }
 
 class Peca {
@@ -321,7 +405,12 @@ class Peca {
 
 }
 
-let cadeiaPecas = new CadeiaDePecas()
+let pecasTabuleiro = new CadeiaDePecas()
+let pecasJogador = new CadeiaDePecas()
+let pecasOponente = new CadeiaDePecas()
+let uiTabuleiro = new InterfaceCanvas(canvasTabuleiroJS,pecasTabuleiro)
+let uiJogador = new InterfaceCanvas(canvasJogadorJS,pecasJogador)
+let uiOponente = new InterfaceCanvas(canvasOponeteJS,pecasOponente)
 
 function checarInput(pontaEscolhida,numeroEscolhido){
   if(pontaEscolhida!=1 && pontaEscolhida!=2){
@@ -335,64 +424,10 @@ function checarInput(pontaEscolhida,numeroEscolhido){
   }
 }
 
-function atualizaTabuleiro(){
 
-  let numeroEscolhido = document.getElementById("pecaJogador").value
-  let pontaEscolhida = document.getElementById("pontaJogador").value
-
-  if(checarInput(pontaEscolhida,numeroEscolhido)=="erro"){
-    return
-  }
-
-  limpaCanvas()
-
-  if(cadeiaPecas.tamanho==0){
-    cadeiaPecas.PrimeiraPeca(numeroEscolhido)
-  } else {
-    cadeiaPecas.AdicionaPeca(numeroEscolhido, pontaEscolhida)
-    cadeiaPecas.AjustaCadeia()
-    limpaCanvas()
-    cadeiaPecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
-  }
-
-  cadeiaPecas.MostrarCadeia()
-
-}
-
-function zoomOut(escala=.8){
-
-  ctx.translate(centro_x,centro_y)
-  ctx.scale(escala,escala)
-  ctx.translate(-centro_x,-centro_y)
-  escala_canvas /= escala
-
-}
-
-function zoomIn(escala=1.2){
-
-  ctx.translate(centro_x,centro_y)
-  ctx.scale(escala,escala)
-  ctx.translate(-centro_x,-centro_y)
-  escala_canvas *= escala
-
-}
-
-function refresh(){
-  limpaCanvas()
-  cadeiaPecas.AjustaCadeia()
-  cadeiaPecas.MostrarCadeia()
-}
-
-function moveUp(){
-// shift everything to the left:
-  var imageData = ctx.getImageData(1, 0, ctx.canvas.width-1, ctx.canvas.height);
-  ctx.putImageData(imageData, 0, 0);
-  // now clear the right-most pixels:
-  ctx.clearRect(ctx.canvas.width-1, 0, 1, ctx.canvas.height);
-}
 
 // function moveDown(){
-  
+
 // }
 
 // function moveLeft(){
@@ -404,7 +439,7 @@ function moveUp(){
 // }
 
 // function moveRight(){
-  
+
 // }
 
 const botaoCor = document.getElementById("botaoCor");
@@ -413,17 +448,3 @@ botaoCor.addEventListener("click", function onClick(event){
   const box = document.getElementById("canvasTabuleiro");
   box.style.backgroundColor = "coral";
 });
-
-
-function limpaCanvas(){
-
-  let nova_largura = tabuleiro.width*escala_canvas
-  let nova_altura = tabuleiro.height*escala_canvas
-  let sobra_largura = nova_largura - l_tabuleiro
-  let sobra_altura = nova_altura - a_tabuleiro
-
-  ctx.translate(-sobra_largura/2,-sobra_altura/2)
-  ctx.clearRect(0,0,nova_largura,nova_altura)
-  ctx.translate(sobra_largura/2,sobra_altura/2)
-
-}
