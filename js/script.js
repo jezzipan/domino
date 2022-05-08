@@ -159,7 +159,7 @@ class InterfaceCanvas {
 
   Refresh(){
     this.LimpaCanvas()
-    this.cadeiaDePecas.AjustaCadeia()
+    //this.cadeiaDePecas.AjustaCadeia()
     this.MostrarTodasPecas()
   }
 
@@ -180,11 +180,37 @@ class InterfaceCanvas {
   }
 
   MoveUp(){
-  // shift everything to the left:
-    var imageData = this.ctx.getImageData(1, 0, this.ctx.canvas.width-1, this.ctx.canvas.height);
-    this.ctx.putImageData(imageData, 0, 0);
-    // now clear the right-most pixels:
-    this.ctx.clearRect(this.ctx.canvas.width-1, 0, 1, this.ctx.canvas.height);
+  // // shift everything to the left:
+  //   var imageData = this.ctx.getImageData(1, 0, this.ctx.canvas.width-1, this.ctx.canvas.height);
+  //   this.ctx.putImageData(imageData, 0, 0);
+  //   // now clear the right-most pixels:
+  //   this.ctx.clearRect(this.ctx.canvas.width-1, 0, 1, this.ctx.canvas.height);
+  //   this.Refresh()
+  // }
+    for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
+      this.cadeiaDePecas.arrayPecas[i].y-=20
+    }
+    this.Refresh()
+  }
+
+  MoveDown(){
+    for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
+      this.cadeiaDePecas.arrayPecas[i].y+=20
+    }
+    this.Refresh()
+  }
+
+  MoveLeft(){
+    for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
+      this.cadeiaDePecas.arrayPecas[i].x-=20
+    }
+    this.Refresh()
+  }
+
+  MoveRight(){
+    for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
+      this.cadeiaDePecas.arrayPecas[i].x+=20
+    }
     this.Refresh()
   }
 
@@ -388,6 +414,8 @@ class CadeiaDePecas {
 
 class Peca {
   constructor(numero){
+    this.x = 0
+    this.y = 0
     this.numero = numero
     this.vertical = false
     this.invertida = false
