@@ -142,14 +142,11 @@ class InterfaceCanvas {
       return
     }
 
-    //this.LimpaCanvas()
-
     if(this.cadeiaDePecas.tamanho==0){
       this.cadeiaDePecas.PrimeiraPeca(numeroEscolhido,this.centro_x,this.centro_y)
     } else {
       this.cadeiaDePecas.AdicionaPeca(numeroEscolhido, pontaEscolhida)
       this.cadeiaDePecas.AjustaCadeia()
-      //this.LimpaCanvas()
       this.cadeiaDePecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
     }
 
@@ -159,7 +156,6 @@ class InterfaceCanvas {
 
   Refresh(){
     this.LimpaCanvas()
-    //this.cadeiaDePecas.AjustaCadeia()
     this.MostrarTodasPecas()
   }
 
@@ -180,13 +176,6 @@ class InterfaceCanvas {
   }
 
   MoveUp(){
-  // // shift everything to the left:
-  //   var imageData = this.ctx.getImageData(1, 0, this.ctx.canvas.width-1, this.ctx.canvas.height);
-  //   this.ctx.putImageData(imageData, 0, 0);
-  //   // now clear the right-most pixels:
-  //   this.ctx.clearRect(this.ctx.canvas.width-1, 0, 1, this.ctx.canvas.height);
-  //   this.Refresh()
-  // }
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].y-=20
     }
@@ -315,9 +304,6 @@ class CadeiaDePecas {
         this.ponta1.sentidoVert = -1
         this.ponta1.curva = true
       }
-      // else {
-      //   zoomOut(0.9)
-      // }
     }
 
     //Curva para baixo se tem muitas pecas na direita
@@ -329,9 +315,6 @@ class CadeiaDePecas {
         this.ponta2.sentidoVert = 1
         this.ponta2.curva = true
       }
-      // else {
-      //   zoomOut(0.9)
-      // }
     }
 
     //Curva para direita se chegar perto do lado de cima do canvas.
@@ -342,9 +325,6 @@ class CadeiaDePecas {
         this.ponta1.sentidoVert = 0
         this.ponta1.curva = true
       }
-      // else {
-      //   zoomOut(0.9)
-      // }
     }
 
     //Curva para esquerda se chegar perto do parte de baixo do canvas.
@@ -355,9 +335,6 @@ class CadeiaDePecas {
         this.ponta2.sentidoVert = 0
         this.ponta2.curva = true
       }
-      // else {
-      //   zoomOut(0.9)
-      // }
     }
 
   }
@@ -468,24 +445,6 @@ function checarInput(pontaEscolhida,numeroEscolhido){
     return "erro"
   }
 }
-
-
-
-// function moveDown(){
-
-// }
-
-// function moveLeft(){
-// // shift everything to the left:
-// var imageData = context.getImageData(1, 0, context.canvas.width-1, context.canvas.height);
-// context.putImageData(imageData, 0, 0);
-// // now clear the right-most pixels:
-// context.clearRect(context.canvas.width-1, 0, 1, context.canvas.height);
-// }
-
-// function moveRight(){
-
-// }
 
 const botaoCor = document.getElementById("botaoCor");
 
