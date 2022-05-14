@@ -9,14 +9,14 @@
   </head>
 
   <body>
-    <div>
+    <div class="container">
+
+      <!-- Canvas da mão do oponente -->
       <canvas id="canvasOponente" width="800" height="100">
         <h3>Navegador nao possui suporte ao canvas</h3>
         <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
       </canvas>
-    </div>
 
-    <div classe="container">
       <!-- Botoes de zoom -->
       <menu id="canvasControl">
         <button id="zoomButton" onclick="uiTabuleiro.ZoomIn(1.2);"><b>+</b></button>
@@ -24,11 +24,13 @@
         <button id="zoomButton" onclick="uiTabuleiro.ZoomOut(0.8);"><b>-</b></button>
       </menu>
 
-      <!-- Canvas principal -->
+      <!-- Canvas do tabuleiro -->
       <canvas id="canvasTabuleiro" width="800" height="400">
         <h3>Navegador nao possui suporte ao canvas</h3>
         <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
       </canvas>
+
+      <!-- Canvas da mão do jogador -->
       <canvas id="canvasJogador" width="800" height="100">
         <h3>Navegador nao possui suporte ao canvas</h3>
         <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
@@ -52,11 +54,21 @@
       </menu>
     </div>
 
-    <p>"Digite o numero da peça ex: 66"</p>
-    <input type="text" id="pecaJogador" value="">
-    <p>"Digite a ponta (1 ou 2)"</p>
-    <input type="text" id="pontaJogador" value="">
-    <button onclick=uiTabuleiro.AtualizaCanvas()>Adicionar peca</button>
+    <!-- Botoes de escolha das peças -->
+    <div class="">
+      <p>Digite o numero da peça ex: 66</p>
+      <input type="text" id="pecaJogador" value="">
+
+      <p>Digite a ponta (1 ou 2)</p>
+      <input type="text" id="pontaJogador" value="">
+      <button onclick=uiTabuleiro.AtualizaCanvas()>Adicionar peca no tabuleiro</button>
+
+      <p>Ou adicione peça na mão de um dos jogadores</p>
+      <button onclick=uiJogador.AtualizaCanvas()>Mao do Jogador</button>
+      <button onclick=uiOponente.AtualizaCanvas()>Mao do Oponente</button>
+
+    </div>
+
 
     <script type="text/javascript" src="js/script.js"></script>
 

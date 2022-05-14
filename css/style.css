@@ -16,6 +16,12 @@ body {
   align-self:right;
 }
 
+#canvasOponente, #canvasJogador {
+  background-color: lightgrey;
+  border: 1px solid #000;
+  z-index: 1;
+}
+
 #zoomButton{
   width:25px;
   height:25px;

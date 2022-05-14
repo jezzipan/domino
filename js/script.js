@@ -427,12 +427,65 @@ class Peca {
 
 }
 
+class CadeiaDePecasJogador extends CadeiaDePecas {
+
+  PrimeiraPeca(numero,centro_x,centro_y){
+    super.PrimeiraPeca(numero,centro_x,centro_y)
+    if(!this.novaPeca.vertical){
+      this.novaPeca.Girar90graus()
+    }
+  }
+
+  AdicionaPeca(numero, ponta=2){
+    super.AdicionaPeca(numero,ponta)
+    if(!this.novaPeca.vertical){
+      this.novaPeca.Girar90graus()
+    }
+  }
+
+}
+
+class InterfaceCanvasJogador extends InterfaceCanvas {
+
+  AtualizaCanvas(){
+
+    let numeroEscolhido = document.getElementById("pecaJogador").value
+    let pontaEscolhida = 2
+
+    if(checarInput(pontaEscolhida,numeroEscolhido)=="erro"){
+      return
+    }
+
+    if(this.cadeiaDePecas.tamanho==0){
+      this.cadeiaDePecas.PrimeiraPeca(numeroEscolhido,this.centro_x,this.centro_y)
+    } else {
+      this.cadeiaDePecas.AdicionaPeca(numeroEscolhido, pontaEscolhida)
+      this.cadeiaDePecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
+    }
+
+    this.CentralizaPecasNoCanvas()
+
+  }
+
+  CentralizaPecasNoCanvas(){
+
+    let deslocX = this.cadeiaDePecas.tamanho/2 * this.cadeiaDePecas.arrayPecas[0].larg
+    for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
+      this.cadeiaDePecas.arrayPecas[i].x = this.centro_x - deslocX
+      deslocX -= this.cadeiaDePecas.arrayPecas[i].larg
+    }
+    this.Refresh()
+  }
+
+
+}
+
 let pecasTabuleiro = new CadeiaDePecas()
-let pecasJogador = new CadeiaDePecas()
-let pecasOponente = new CadeiaDePecas()
+let pecasJogador = new CadeiaDePecasJogador()
+let pecasOponente = new CadeiaDePecasJogador()
 let uiTabuleiro = new InterfaceCanvas(canvasTabuleiroJS,pecasTabuleiro)
-let uiJogador = new InterfaceCanvas(canvasJogadorJS,pecasJogador)
-let uiOponente = new InterfaceCanvas(canvasOponeteJS,pecasOponente)
+let uiJogador = new InterfaceCanvasJogador(canvasJogadorJS,pecasJogador)
+let uiOponente = new InterfaceCanvasJogador(canvasOponeteJS,pecasOponente)
 
 function checarInput(pontaEscolhida,numeroEscolhido){
   if(pontaEscolhida!=1 && pontaEscolhida!=2){
