@@ -6,27 +6,35 @@ const canvasTabuleiroJS = document.getElementById("canvasTabuleiro")
 const canvasJogadorJS = document.getElementById("canvasJogador")
 const canvasOponeteJS = document.getElementById("canvasOponente")
 
+//Variaveis globais
+const l_peca_original = 198
+const a_peca_original = 100
+const reducao = 3
+let l_peca = l_peca_original/reducao
+let a_peca = a_peca_original/reducao
+let escala_canvas = 1
 
-//   // Click and drag
-// var rect1x = rec1y;
-// var a = b;
+//Lista de imagens das Pecas
+let caminhoImagem = "Imagens/Pecas_teste/"
+//let caminhoImagem = "Imagens/Pecas_B/B_"
+//let caminhoImagem = "Imagens/Pecas_C/C_"
+//let caminhoImagem = "Imagens/Pecas_D/D_"
+let extencaoImagem = ".png"
+let imagensPecas = {}
+for (let lado1 = 6; lado1 >= 0; lado1--) {
+  for (let lado2 = lado1; lado2 >= 0; lado2--) {
+    let valorChave = lado1.toString() + lado2.toString()
+    let nomePeca = lado1.toString() + "_" + lado2.toString()
+    imagensPecas[valorChave] = caminhoImagem + nomePeca + extencaoImagem
+  }
+}
+//Conjunto de valores validos de pecas para usuario digitar
+pecasValidas = Object.keys(imagensPecas)
+nPecas = pecasValidas.length
+for (var i = 0; i < nPecas; i++) {
+  pecasValidas.push(pecasValidas[i].split("").reverse().join(""))
+}
 
-// function mouseDown(){
-//   a = document.getElementById("canvasTabuleiro").getBoundingClientRect().left;
-//   b = document.getElementById("canvasTabuleiro").getBoundingClientRect().top;
-//   rect1x = window.event.clientX - a;
-//   rect1y = window.event.clientY - b;
-// }
-
-// function mouseUp(){
-//   var rect2x = window.event.clientX - a;
-//   var rect2y = window.event.clientY - b;
-
-//   // var c=document.getElementById("canvasTabuleiro");
-//   // var ctx=c.getContext("2d");
-//   // ctx.fillStyle="#FF0000";
-//   ctx.fillRect(rect1x, rect1y, rect2x - rect1x, rect2y - rect1y);
-// }
 
 class InterfaceCanvas {
 
@@ -39,6 +47,8 @@ class InterfaceCanvas {
     this.a_canvasObj = this.canvasObj.height
     this.centro_x = this.l_canvasObj/2
     this.centro_y = this.a_canvasObj/2
+
+    this.semZoom = true
   }
 
   MostrarPecaNova(){
@@ -148,6 +158,7 @@ class InterfaceCanvas {
       this.cadeiaDePecas.AdicionaPeca(numeroEscolhido, pontaEscolhida)
       this.cadeiaDePecas.AjustaCadeia()
       this.cadeiaDePecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
+      this.VerificaZoom()
     }
 
     this.MostrarPecaNova()
@@ -203,35 +214,14 @@ class InterfaceCanvas {
     this.Refresh()
   }
 
-}
-
-//Variaveis globais
-const l_peca_original = 198
-const a_peca_original = 100
-const reducao = 3
-let l_peca = l_peca_original/reducao
-let a_peca = a_peca_original/reducao
-let escala_canvas = 1
-
-//Lista de imagens das Pecas
-let caminhoImagem = "Imagens/Pecas_teste/"
-//let caminhoImagem = "Imagens/Pecas_B/B_"
-//let caminhoImagem = "Imagens/Pecas_C/C_"
-//let caminhoImagem = "Imagens/Pecas_D/D_"
-let extencaoImagem = ".png"
-let imagensPecas = {}
-for (let lado1 = 6; lado1 >= 0; lado1--) {
-  for (let lado2 = lado1; lado2 >= 0; lado2--) {
-    let valorChave = lado1.toString() + lado2.toString()
-    let nomePeca = lado1.toString() + "_" + lado2.toString()
-    imagensPecas[valorChave] = caminhoImagem + nomePeca + extencaoImagem
+  VerificaZoom(){
+    if(this.semZoom &&
+      (this.cadeiaDePecas.ponta1.tamanho > 4 || this.cadeiaDePecas.ponta2.tamanho > 4)){
+      this.ZoomOut()
+      this.semZoom = false
+    }
   }
-}
-//Conjunto de valores validos de pecas para usuario digitar
-pecasValidas = Object.keys(imagensPecas)
-nPecas = pecasValidas.length
-for (var i = 0; i < nPecas; i++) {
-  pecasValidas.push(pecasValidas[i].split("").reverse().join(""))
+
 }
 
 //Classe principal usada para criar uma cadeia de pecas
@@ -239,7 +229,6 @@ class CadeiaDePecas {
   constructor(){
     this.arrayPecas = []
     this.tamanho = 0
-    this.semZoom = true
     this.novaPeca
     this.pecaAnterior
 
@@ -289,12 +278,6 @@ class CadeiaDePecas {
   }
 
   AjustaCadeia(){
-
-    // if(this.semZoom &&
-    //   (this.ponta1.tamanho > 4 || this.ponta2.tamanho > 4)){
-    //   zoomOut()
-    //   this.semZoom = false
-    // }
 
     //Curva para cima se tem muitas pecas na esquerda.
     //Se houver pecas transversais, nao curva e reduz o zoom.
@@ -480,13 +463,6 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
 
 }
 
-let pecasTabuleiro = new CadeiaDePecas()
-let pecasJogador = new CadeiaDePecasJogador()
-let pecasOponente = new CadeiaDePecasJogador()
-let uiTabuleiro = new InterfaceCanvas(canvasTabuleiroJS,pecasTabuleiro)
-let uiJogador = new InterfaceCanvasJogador(canvasJogadorJS,pecasJogador)
-let uiOponente = new InterfaceCanvasJogador(canvasOponeteJS,pecasOponente)
-
 function checarInput(pontaEscolhida,numeroEscolhido){
   if(pontaEscolhida!=1 && pontaEscolhida!=2){
     alert("Ponta inválida - Escolha '1' ou '2'")
@@ -499,9 +475,39 @@ function checarInput(pontaEscolhida,numeroEscolhido){
   }
 }
 
+let pecasTabuleiro = new CadeiaDePecas()
+let pecasJogador = new CadeiaDePecasJogador()
+let pecasOponente = new CadeiaDePecasJogador()
+let uiTabuleiro = new InterfaceCanvas(canvasTabuleiroJS,pecasTabuleiro)
+let uiJogador = new InterfaceCanvasJogador(canvasJogadorJS,pecasJogador)
+let uiOponente = new InterfaceCanvasJogador(canvasOponeteJS,pecasOponente)
+
+
 const botaoCor = document.getElementById("botaoCor");
 
 botaoCor.addEventListener("click", function onClick(event){
   const box = document.getElementById("canvasTabuleiro");
   box.style.backgroundColor = "coral";
 });
+
+
+//   // Click and drag
+// var rect1x = rec1y;
+// var a = b;
+
+// function mouseDown(){
+//   a = document.getElementById("canvasTabuleiro").getBoundingClientRect().left;
+//   b = document.getElementById("canvasTabuleiro").getBoundingClientRect().top;
+//   rect1x = window.event.clientX - a;
+//   rect1y = window.event.clientY - b;
+// }
+
+// function mouseUp(){
+//   var rect2x = window.event.clientX - a;
+//   var rect2y = window.event.clientY - b;
+
+//   // var c=document.getElementById("canvasTabuleiro");
+//   // var ctx=c.getContext("2d");
+//   // ctx.fillStyle="#FF0000";
+//   ctx.fillRect(rect1x, rect1y, rect2x - rect1x, rect2y - rect1y);
+// }
