@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title>Tabuleiro domino</title>
+    <link href="css/style.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+    <div class="container">
+
+      <!-- Canvas da mão do oponente -->
+      <canvas id="canvasOponente" width="800" height="100">
+        <h3>Navegador nao possui suporte ao canvas</h3>
+        <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
+      </canvas>
+
+      <!-- Botoes de zoom -->
+      <menu id="canvasControl">
+        <button id="zoomButton" onclick="uiTabuleiro.ZoomIn(1.2);"><b>+</b></button>
+      </br>
+        <button id="zoomButton" onclick="uiTabuleiro.ZoomOut(0.8);"><b>-</b></button>
+      </menu>
+
+      <!-- Canvas do tabuleiro -->
+      <canvas id="canvasTabuleiro" width="800" height="400">
+        <h3>Navegador nao possui suporte ao canvas</h3>
+        <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
+      </canvas>
+
+      <!-- Canvas da mão do jogador -->
+      <canvas id="canvasJogador" width="800" height="100">
+        <h3>Navegador nao possui suporte ao canvas</h3>
+        <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
+      </canvas>
+    </div>
+
+    <!-- Botoes de mudança de cor do canvas -->
+    <div>
+      <menu id="colors" style="z-index:3;position:absolute;top:110px;left:-10px;">
+        <button id="botaoCor">Temas</button>
+      </menu>
+    </div>
+
+    <!-- Botoes de movimentação da tela -->
+    <div>
+      <menu id="moveCanvas" style="z-index:4;position:absolute;top:1;left:1;">
+        <button id="moveButton" onclick="uiTabuleiro.MoveLeft();" style="top:-340px;left:10px;"><</button>
+        <button id="moveButton" onclick="uiTabuleiro.MoveUp();" style="top:-500px;left:380px;">^</button>
+        <button id="moveButton" onclick="uiTabuleiro.MoveDown();" style="top:-168px;left:380px;">v</button>
+        <button id="moveButton" onclick="uiTabuleiro.MoveRight();" style="top:-340px;left:770px;">></button>
+      </menu>
+    </div>
+
+    <!-- Botoes de escolha das peças -->
+    <div class="">
+      <p>Digite o numero da peça ex: 66</p>
+      <input type="text" id="pecaJogador" value="">
+
+      <p>Digite a ponta (1 ou 2)</p>
+      <input type="text" id="pontaJogador" value="">
+      <button onclick=uiTabuleiro.AtualizaCanvas()>Adicionar peca no tabuleiro</button>
+
+      <p>Ou adicione peça na mão de um dos jogadores</p>
+      <button onclick=uiJogador.AtualizaCanvas()>Mao do Jogador</button>
+      <button onclick=uiOponente.AtualizaCanvas()>Mao do Oponente</button>
+
+    </div>
+
+
+    <script type="text/javascript" src="js/script.js"></script>
+
+  </body>
+</html>
