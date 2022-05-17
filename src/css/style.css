@@ -1,0 +1,71 @@
+body {
+  
+}
+
+#canvasTabuleiro {
+  background-color: lightgrey;
+  border: 1px solid #000;
+  z-index: 1;
+}
+
+#canvasControl {
+  z-index:2;
+  position:absolute;
+  top:1;
+  left:720px;
+  align-self:right;
+}
+
+#canvasOponente, #canvasJogador {
+  background-color: lightgrey;
+  border: 1px solid #000;
+  z-index: 1;
+}
+
+#zoomButton{
+  width:25px;
+  height:25px;
+}
+
+#moveButton{
+  width:25px;
+  height:25px;
+  position:absolute;
+  align-self:right;
+}
+
+.banner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+section {
+  display: flex;
+  width: 100%;
+}
+
+.area-acesso {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.cor-primaria {
+  background-color: #A7323E;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 7px 13px;
+  gap: 64px;
+  border-radius: 25px;
+  font-family: Sansation;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 36px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin: 20% 0;
+
+}
