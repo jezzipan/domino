@@ -72,6 +72,7 @@ class InterfaceCanvas {
 
     //Salva os parametros do canvas
     this.ctx.save()
+    //Muda a referencia do canvas para o meio da peca
     this.ctx.translate(img_x,img_y)
 
     //Ajuste dos parametros caso a imagem seja vartical
@@ -103,9 +104,9 @@ class InterfaceCanvas {
   MostrarTodasPecas(){
     if (this.cadeiaDePecas.arrayPecas[0]){ //Se cadeia nao vazia
       this.MostrarRecursivo(0)
-    } else {
-      alert("Cadeia vazia")
-    }
+    } //else {
+      //alert("Cadeia vazia")
+    //}
   }
 
   MostrarRecursivo(i=0){
@@ -322,7 +323,6 @@ class CadeiaDePecas {
 
   }
 
-
   AtualizaCoordenadasNovaPeca(ponta=1){
     let sentidoHoriz
     let sentidoVert
@@ -426,6 +426,16 @@ class CadeiaDePecasJogador extends CadeiaDePecas {
     }
   }
 
+  RemovePeca(peca){
+    let indice = this.arrayPecas.indexOf(peca)
+    var pecaRemovida
+    if (indice > -1){
+      pecaRemovida = this.arrayPecas.splice(indice,1)[0]
+    }
+    this.tamanho = this.arrayPecas.length
+    return pecaRemovida.numero
+  }
+
 }
 
 class InterfaceCanvasJogador extends InterfaceCanvas {
@@ -447,6 +457,8 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     }
 
     this.CentralizaPecasNoCanvas()
+    //Adiciona um escutador para a peça adicionada
+    this.TornaPecaResponsiva()
 
   }
 
@@ -458,8 +470,40 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
       deslocX -= this.cadeiaDePecas.arrayPecas[i].larg
     }
     this.Refresh()
+
   }
 
+  GetPosicaoMouse(event){
+    let areaCanvas = this.canvasObj.getBoundingClientRect()
+    return {
+      x: event.clientX - areaCanvas.left,
+      y: event.clientY - areaCanvas.top
+    }
+  }
+
+  ClicouNaPeca(posicaoMouse,peca){
+    return (posicaoMouse.x > peca.x - peca.larg/2) && (posicaoMouse.x < peca.x + peca.larg/2) &&
+      (posicaoMouse.y < peca.y + peca.alt/2) && (posicaoMouse.y > peca.y - peca.alt/2)
+  }
+
+  TornaPecaResponsiva(){
+
+    let peca = this.cadeiaDePecas.novaPeca
+
+    this.canvasObj.addEventListener('click', function(evt) {
+      let posMouse = this.GetPosicaoMouse(evt)
+      if(this.ClicouNaPeca(posMouse,peca)){
+        let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
+        alert(nroPecaRemovida)
+        if(this.cadeiaDePecas.tamanho){
+          this.CentralizaPecasNoCanvas()
+        } else {
+          this.LimpaCanvas()
+        }
+      }
+    }.bind(this), false)
+
+  }
 
 }
 
