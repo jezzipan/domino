@@ -15,10 +15,10 @@ let a_peca = a_peca_original/reducao
 let escala_canvas = 1
 
 //Lista de imagens das Pecas
-let caminhoImagem = "Imagens/Pecas_teste/"
-//let caminhoImagem = "Imagens/Pecas_B/B_"
-//let caminhoImagem = "Imagens/Pecas_C/C_"
-//let caminhoImagem = "Imagens/Pecas_D/D_"
+let caminhoImagem = "./src/img/Pecas_teste/"
+//let caminhoImagem = "../src/img/Pecas_B/B_"
+//let caminhoImagem = "../src/img/Pecas_C/C_"
+//let caminhoImagem = "../src/img/Pecas_D/D_"
 let extencaoImagem = ".png"
 let imagensPecas = {}
 for (let lado1 = 6; lado1 >= 0; lado1--) {
