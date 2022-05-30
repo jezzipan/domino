@@ -1,0 +1,35 @@
+body {
+  background-color: #bf2188;
+}
+
+#canvasTabuleiro {
+  background-color: lightgrey;
+  border: 1px solid #000;
+  z-index: 1;
+}
+
+#canvasControl {
+  position:absolute;
+  top:1;
+  left:720px;
+  align-self:right;
+  z-index:2;
+}
+
+#canvasOponente, #canvasJogador {
+  background-color: lightgrey;
+  border: 1px solid #000;
+  z-index: 1;
+}
+
+#zoomButton{
+  width:25px;
+  height:25px;
+}
+
+#moveButton{
+  width:25px;
+  height:25px;
+  position:absolute;
+  align-self:right;
+}
