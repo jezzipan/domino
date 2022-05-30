@@ -9,11 +9,11 @@ body {
 }
 
 #canvasControl {
-  z-index:2;
   position:absolute;
   top:1;
   left:720px;
   align-self:right;
+  z-index:2;
 }
 
 #canvasOponente, #canvasJogador {

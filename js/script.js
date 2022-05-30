@@ -459,7 +459,7 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     this.CentralizaPecasNoCanvas()
     //Adiciona um escutador para a peça adicionada
     this.TornaPecaResponsiva()
-
+    //this.CriarBotaoNaPeca()
   }
 
   CentralizaPecasNoCanvas(){
@@ -504,6 +504,22 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     }.bind(this), false)
 
   }
+
+  // CriarBotaoNaPeca(){
+  //   let peca = this.cadeiaDePecas.novaPeca
+  //
+  //   let btn = document.createElement("button")
+  //   //btn.style.position = "absolute"
+  //
+  //   btn.style.top = -60
+  //   btn.style.left = 40
+  //   btn.innerHTML = "Click Me"
+  //   //document.body.appendChild(btn)
+  //   let menuMaoJogador = document.getElementById("maoJogador")
+  //   //btn.border-style = "solid"
+  //   menuMaoJogador.appendChild(btn)
+  //
+  // }
 
 }
 
