@@ -30,19 +30,11 @@
         <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
       </canvas>
 
-
-      <div style="position:relative">
-        <!-- Canvas da mão do jogador -->
-        <canvas id="canvasJogador" width="800" height="100">
-          <h3>Navegador nao possui suporte ao canvas</h3>
-          <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
-        </canvas>
-
-        <!-- Menu de controle para que pecas do jogador. Botoes sao adicionados no JS -->
-        <menu id="maoJogador" style="z-index:4;position:absolute;bottom:0;left:0;">
-        </menu>
-      </div>
-
+      <!-- Canvas da mão do jogador -->
+      <canvas id="canvasJogador" width="800" height="100">
+        <h3>Navegador nao possui suporte ao canvas</h3>
+        <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
+      </canvas>
 
     </div>
 
@@ -78,7 +70,6 @@
       <button onclick=uiOponente.AtualizaCanvas()>Mao do Oponente</button>
 
     </div>
-
 
     <script type="text/javascript" src="src/js/script.js"></script>
 

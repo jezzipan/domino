@@ -117,13 +117,11 @@ class InterfaceCanvas {
       let numeroImg  = pecaObj.numero
       pecaImg.src = imagensPecas[numeroImg]
 
+      //Esse eventlistener junto com a funcao recursiva abaixo
+      //garante que cada peca soh eh processada e mostrarda
+      //apos a peca anterior
       pecaImg.addEventListener("load",()=>{
-        //Esse eventlistener junto com a funcao recursiva abaixo
-        //garante que cada peca soh eh processada e mostrarda
-        //apos a peca anterior
-
         this.MostrarUmaPeca(pecaImg,pecaObj)
-
         //Recursividade da funcao
         this.MostrarRecursivo(i+1)
 
@@ -468,7 +466,8 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     this.Refresh()
     //Adiciona um botao sobre cada peca para que ela seja
     //responsiva ao click do mouse
-    this.TornarPecaResponsiva()
+    this.LimparBotoesDasPecas()
+    this.TornarPecasResponsivas()
 
   }
 
@@ -480,7 +479,7 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     }
   }
 
-  TornarPecaResponsiva(){
+  TornarPecasResponsivas(){
     //Para cada peca na mao do jogador, adiciona um botao
     //e determinad sua logica
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
@@ -516,7 +515,15 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     btn.style.border ="dotted";
     btn.style.width = a_peca + "px";
     btn.style.height = l_peca + "px";
+    btn.classList.add('BotaoNaPeca')
     return btn;
+  }
+
+  LimparBotoesDasPecas(){
+    let botoes = document.querySelectorAll('.BotaoNaPeca')
+    botoes.forEach(function(botao) {
+      botao.remove();
+    });
   }
 
 }
