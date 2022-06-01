@@ -153,6 +153,11 @@ class InterfaceCanvas {
       return
     }
 
+    this.AdicionaPecaNoCanvas(pontaEscolhida,numeroEscolhido)
+
+  }
+
+  AdicionaPecaNoCanvas(pontaEscolhida,numeroEscolhido){
     if(this.cadeiaDePecas.tamanho==0){
       this.cadeiaDePecas.PrimeiraPeca(numeroEscolhido,this.centro_x,this.centro_y)
     } else {
@@ -161,9 +166,7 @@ class InterfaceCanvas {
       this.cadeiaDePecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
       this.VerificaZoom()
     }
-
     this.MostrarPecaNova()
-
   }
 
   Refresh(){
@@ -440,6 +443,11 @@ class CadeiaDePecasJogador extends CadeiaDePecas {
 
 class InterfaceCanvasJogador extends InterfaceCanvas {
 
+  constructor(canvasJS,cadeiaDePecas,uiTabuleiro){
+    super(canvasJS,cadeiaDePecas)
+    this.uiTabuleiro = uiTabuleiro
+  }
+
   AtualizaCanvas(){
 
     let numeroEscolhido = document.getElementById("pecaJogador").value
@@ -454,72 +462,62 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     } else {
       this.cadeiaDePecas.AdicionaPeca(numeroEscolhido, pontaEscolhida)
       this.cadeiaDePecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
+      this.CentralizaPecasNoCanvas()
     }
 
-    this.CentralizaPecasNoCanvas()
-    //Adiciona um escutador para a peça adicionada
-    this.TornaPecaResponsiva()
-    //this.CriarBotaoNaPeca()
+    this.Refresh()
+    //Adiciona um botao sobre cada peca para que ela seja
+    //responsiva ao click do mouse
+    this.TornarPecaResponsiva()
+
   }
 
   CentralizaPecasNoCanvas(){
-
     let deslocX = this.cadeiaDePecas.tamanho/2 * this.cadeiaDePecas.arrayPecas[0].larg
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].x = this.centro_x - deslocX
       deslocX -= this.cadeiaDePecas.arrayPecas[i].larg
     }
-    this.Refresh()
-
   }
 
-  GetPosicaoMouse(event){
-    let areaCanvas = this.canvasObj.getBoundingClientRect()
-    return {
-      x: event.clientX - areaCanvas.left,
-      y: event.clientY - areaCanvas.top
-    }
-  }
+  TornarPecaResponsiva(){
+    //Para cada peca na mao do jogador, adiciona um botao
+    //e determinad sua logica
+    for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
 
-  ClicouNaPeca(posicaoMouse,peca){
-    return (posicaoMouse.x > peca.x - peca.larg/2) && (posicaoMouse.x < peca.x + peca.larg/2) &&
-      (posicaoMouse.y < peca.y + peca.alt/2) && (posicaoMouse.y > peca.y - peca.alt/2)
-  }
+      let peca = this.cadeiaDePecas.arrayPecas[i]
+      let button = this.CriarBotaoNaPeca(peca.x, peca.y)
 
-  TornaPecaResponsiva(){
-
-    let peca = this.cadeiaDePecas.novaPeca
-
-    this.canvasObj.addEventListener('click', function(evt) {
-      let posMouse = this.GetPosicaoMouse(evt)
-      if(this.ClicouNaPeca(posMouse,peca)){
+      button.onclick = function(){
         let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
-        alert(nroPecaRemovida)
+        this.uiTabuleiro.AdicionaPecaNoCanvas(1,nroPecaRemovida)
+        document.body.removeChild(button)
         if(this.cadeiaDePecas.tamanho){
           this.CentralizaPecasNoCanvas()
+          this.Refresh()
         } else {
           this.LimpaCanvas()
         }
-      }
-    }.bind(this), false)
+      }.bind(this)
+
+    }
 
   }
 
-  // CriarBotaoNaPeca(){
-  //   let peca = this.cadeiaDePecas.novaPeca
-  //
-  //   let btn = document.createElement("button")
-  //   //btn.style.position = "absolute"
-  //
-  //   btn.style.top = -60
-  //   btn.style.left = 40
-  //   btn.innerHTML = "Click Me"
-  //   //document.body.appendChild(btn)
-  //   let menuMaoJogador = document.getElementById("maoJogador")
-  //   //btn.border-style = "solid"
-  //   menuMaoJogador.appendChild(btn)
-  //
-  // }
+  CriarBotaoNaPeca(x, y) {
+    //Cria um botao na posicao indicada
+    let areaCanvas = this.canvasObj.getBoundingClientRect()
+    var btn = document.createElement("button");
+    document.body.appendChild(btn);
+    btn.style.position = "absolute";
+    btn.style.left = (x - areaCanvas.left) + "px";
+    btn.style.top = (y + 490) + "px";
+    btn.style.background = "none";
+    btn.style.border ="dotted";
+    btn.style.width = a_peca + "px";
+    btn.style.height = l_peca + "px";
+    return btn;
+  }
 
 }
 
@@ -539,8 +537,8 @@ let pecasTabuleiro = new CadeiaDePecas()
 let pecasJogador = new CadeiaDePecasJogador()
 let pecasOponente = new CadeiaDePecasJogador()
 let uiTabuleiro = new InterfaceCanvas(canvasTabuleiroJS,pecasTabuleiro)
-let uiJogador = new InterfaceCanvasJogador(canvasJogadorJS,pecasJogador)
-let uiOponente = new InterfaceCanvasJogador(canvasOponeteJS,pecasOponente)
+let uiJogador = new InterfaceCanvasJogador(canvasJogadorJS,pecasJogador,uiTabuleiro)
+let uiOponente = new InterfaceCanvasJogador(canvasOponeteJS,pecasOponente,uiTabuleiro)
 
 
 const botaoCor = document.getElementById("botaoCor");
