@@ -3,8 +3,8 @@ body {
 }
 
 #canvasTabuleiro {
-  background-color: lightgrey;
-  border: 1px solid #000;
+  background-color: transparent /*lightgrey*/;
+  border: 1px solid rgba(0, 0, 0, 0.4);
   z-index: 1;
 }
 
@@ -17,14 +17,16 @@ body {
 }
 
 #canvasOponente, #canvasJogador {
-  background-color: lightgrey;
-  border: 1px solid #000;
+  background-color: transparent /*lightgrey*/;
+  border: transparent /*1px solid #000*/;
   z-index: 1;
 }
 
 #zoomButton{
   width:25px;
   height:25px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.4);
 }
 
 #moveButton{
@@ -32,4 +34,6 @@ body {
   height:25px;
   position:absolute;
   align-self:right;
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 0, 0, 0.4);
 }

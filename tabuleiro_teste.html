@@ -57,18 +57,18 @@
 
 
     <!-- Botoes de escolha das peças -->
-    <div class="">
-      <p>Digite o numero da peça ex: 66</p>
-      <input type="text" id="pecaJogador" value="">
-
-      <p>Digite a ponta (1 ou 2)</p>
-      <input type="text" id="pontaJogador" value="">
-      <button onclick=uiTabuleiro.AtualizaCanvas()>Adicionar peca no tabuleiro</button>
-
-      <p>Ou adicione peça na mão de um dos jogadores</p>
-      <button onclick=uiJogador.AtualizaCanvas()>Mao do Jogador</button>
-      <button onclick=uiOponente.AtualizaCanvas()>Mao do Oponente</button>
-
+    <div style="position:absolute">
+      <p>
+        <span>Nº peça (ex: 66)</span>
+        <input type="text" id="pecaJogador" value="" size="2">
+        <span>Ponta (1 ou 2)</span>
+        <input type="text" id="pontaJogador" value="" size="2">
+      </p>
+      <p>
+        <button onclick=uiTabuleiro.AtualizaCanvas()>No tabuleiro</button>
+        <button onclick=uiJogador.AtualizaCanvas()>Mão do jogador</button>
+        <button onclick=uiOponente.AtualizaCanvas()>Mão do oponente</button>
+      </p>
     </div>
 
     <script type="text/javascript" src="src/js/script.js"></script>

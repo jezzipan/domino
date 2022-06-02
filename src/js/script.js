@@ -9,7 +9,7 @@ const canvasOponeteJS = document.getElementById("canvasOponente")
 //Variaveis globais
 const l_peca_original = 198
 const a_peca_original = 100
-const reducao = 3
+const reducao = 2.7
 let l_peca = l_peca_original/reducao
 let a_peca = a_peca_original/reducao
 let escala_canvas = 1
@@ -49,6 +49,7 @@ class InterfaceCanvas {
     this.centro_y = this.a_canvasObj/2
 
     this.semZoom = true
+
   }
 
   MostrarPecaNova(){
@@ -190,28 +191,28 @@ class InterfaceCanvas {
 
   MoveUp(){
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-      this.cadeiaDePecas.arrayPecas[i].y-=20
+      this.cadeiaDePecas.arrayPecas[i].y+=20
     }
     this.Refresh()
   }
 
   MoveDown(){
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-      this.cadeiaDePecas.arrayPecas[i].y+=20
+      this.cadeiaDePecas.arrayPecas[i].y-=20
     }
     this.Refresh()
   }
 
   MoveLeft(){
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-      this.cadeiaDePecas.arrayPecas[i].x-=20
+      this.cadeiaDePecas.arrayPecas[i].x+=20
     }
     this.Refresh()
   }
 
   MoveRight(){
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-      this.cadeiaDePecas.arrayPecas[i].x+=20
+      this.cadeiaDePecas.arrayPecas[i].x-=20
     }
     this.Refresh()
   }
@@ -444,6 +445,21 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
   constructor(canvasJS,cadeiaDePecas,uiTabuleiro){
     super(canvasJS,cadeiaDePecas)
     this.uiTabuleiro = uiTabuleiro
+
+    this.x_retangAzul = this.l_canvasObj/4
+    this.y_retangAzul = this.a_canvasObj*0.3
+    this.alt_retangAzul = this.l_canvasObj/2
+    this.lar_retangAzul = l_peca*0.8
+
+    this.ctx.fillStyle="#0e3659"
+    this.ctx.fillRect(this.x_retangAzul,this.y_retangAzul,
+      this.alt_retangAzul,this.lar_retangAzul)
+  }
+
+  DesenhaRetanguloAzul(){
+    this.ctx.fillStyle="#0e3659"
+    this.ctx.fillRect(this.x_retangAzul,this.y_retangAzul,
+      this.alt_retangAzul,this.lar_retangAzul)
   }
 
   AtualizaCanvas(){
@@ -468,7 +484,9 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
 
   Refresh(){
     this.CentralizaPecasNoCanvas()
-    super.Refresh()
+    this.LimpaCanvas()
+    this.DesenhaRetanguloAzul()
+    this.MostrarTodasPecas()
     this.LimparBotoesDasPecas()
     this.TornarPecasResponsivas()
   }
@@ -497,6 +515,7 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
           this.Refresh()
         } else {
           this.LimpaCanvas()
+          this.DesenhaRetanguloAzul()
         }
       }.bind(this)
 
