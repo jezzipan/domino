@@ -38,6 +38,12 @@
 
     </div>
 
+    <div>
+      <canvas id="canvasCompra" width="400" height="400" style="position:absolute;top:100px;left:400px;">
+      </canvas>
+    </div>
+
+
     <!-- Botoes de mudança de cor do canvas -->
     <div>
       <menu id="colors" style="z-index:3;position:absolute;top:110px;left:-10px;">
@@ -51,7 +57,7 @@
         <button id="moveButton" onclick="uiTabuleiro.MoveLeft();" style="top:-340px;left:10px;"><</button>
         <button id="moveButton" onclick="uiTabuleiro.MoveUp();" style="top:-500px;left:380px;">^</button>
         <button id="moveButton" onclick="uiTabuleiro.MoveDown();" style="top:-168px;left:380px;">v</button>
-        <button id="moveButton" onclick="uiTabuleiro.MoveRight();" style="top:-340px;left:770px;">></button>
+        <button id="moveButton" onclick="uiCompra.MostrarCanvas();"  style="top:-340px;left:770px;">></button>
       </menu>
     </div>
 
@@ -68,6 +74,7 @@
         <button onclick=uiTabuleiro.AtualizaCanvas()>No tabuleiro</button>
         <button onclick=uiJogador.AtualizaCanvas()>Mão do jogador</button>
         <button onclick=uiOponente.AtualizaCanvas()>Mão do oponente</button>
+        <button onclick=uiCompra.MostrarCanvas()>Compra</button>
       </p>
     </div>
 

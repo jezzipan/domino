@@ -22,6 +22,12 @@ body {
   z-index: 1;
 }
 
+#canvasCompra {
+  background-color: transparent;
+  border: transparent;
+  z-index: 0;
+}
+
 #zoomButton{
   width:25px;
   height:25px;
