@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"name": "Vscode",
+			"path": "..\\..\\..\\..\\..\\..\\Workspace\\vscode\\Vscode"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Telas - código"
+	}
+}
