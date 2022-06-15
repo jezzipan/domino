@@ -9,6 +9,9 @@
   </head>
 
   <body>
+
+
+
     <div class="container">
 
       <!-- Canvas da mão do oponente -->
@@ -46,20 +49,24 @@
 
     <!-- Botoes de mudança de cor do canvas -->
     <div>
-      <menu id="colors" style="z-index:3;position:absolute;top:110px;left:-10px;">
+      <menu id="colors" style="z-index:4;position:absolute;top:110px;left:-10px;">
         <button id="botaoCor">Temas</button>
       </menu>
     </div>
 
     <!-- Botoes de movimentação da tela -->
     <div>
-      <menu id="moveCanvas" style="z-index:4;position:absolute;top:1;left:1;">
+      <menu id="moveCanvas" style="z-index:5;position:absolute;top:1;left:1;">
         <button id="moveButton" onclick="uiTabuleiro.MoveLeft();" style="top:-340px;left:10px;"><</button>
         <button id="moveButton" onclick="uiTabuleiro.MoveUp();" style="top:-500px;left:380px;">^</button>
         <button id="moveButton" onclick="uiTabuleiro.MoveDown();" style="top:-168px;left:380px;">v</button>
         <button id="moveButton" onclick="uiTabuleiro.MoveRight();"  style="top:-340px;left:770px;">></button>
       </menu>
     </div>
+
+    <!-- Retângulos azuis nas mãos dos jogadores -->
+    <div style="z-index:1;position:absolute;width:500px;height:60px;background-color:#0e3659;top:20px;left:150px;border:transparent;"></div>
+    <div style="z-index:1;position:absolute;width:500px;height:60px;background-color:#0e3659;top:550px;left:150px;border:transparent;"></div>
 
 
     <!-- Botoes de escolha das peças -->
