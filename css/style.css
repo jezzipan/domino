@@ -127,3 +127,35 @@ h4{
     color:white;
 }
 
+/*Login e Cadastro - usando bootstrap*/
+.row{
+    width:100%;
+    height:100%;
+    margin:auto;
+    align-content:center;
+    align-items:center;
+    position: fixed; top: 0; left: 0;
+}
+#logo{
+    width: 100%;
+    height: auto
+}
+.form-label, a {
+    line-height: 20px;
+    font-family: 'Arvo';
+}
+.form-outline{
+    line-height: 40px;
+}
+.form-control{
+    width:90%;
+}
+.btn{
+    margin-bottom:10px;
+    border-radius: 15px;
+    background-color:#a6333d;
+    text-align: center;
+    color: white;
+    font-family: Oswald;
+    text-transform: uppercase;
+}
