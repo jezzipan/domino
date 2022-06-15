@@ -159,3 +159,21 @@ h4{
     font-family: Oswald;
     text-transform: uppercase;
 }
+/*Sala criada*/ 
+.min{
+    display:flexbox-block;
+    margin: none;
+}
+#min{
+    background-color: #bf2188;
+    display: flexbox;  
+    height: 97%;
+    width: 70%;
+    position:fixed;
+    left:210px;
+    padding:0px;
+}
+
+#cor{
+    color:#f2cb05
+}
