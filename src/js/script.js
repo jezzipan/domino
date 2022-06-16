@@ -54,19 +54,19 @@ class InterfaceCanvas {
     this.semZoom = true
   }
 
-  Iniciar(){
-    this.ApresentaFundoTabuleiro()
-  }
-
-  ApresentaFundoTabuleiro(){
-    let tabuleiroImg = new Image()
-    tabuleiroImg.src = this.CarregarImagem('tabuleiro')
-    tabuleiroImg.addEventListener("load",()=>{
-      this.ctx.drawImage(tabuleiroImg,
-        0,0,
-        this.l_canvasObj,this.a_canvasObj)
-    })
-  }
+  // Iniciar(){
+  //   this.ApresentaFundoTabuleiro()
+  // }
+  //
+  // ApresentaFundoTabuleiro(){
+  //   let tabuleiroImg = new Image()
+  //   tabuleiroImg.src = this.CarregarImagem('tabuleiro')
+  //   tabuleiroImg.addEventListener("load",()=>{
+  //     this.ctx.drawImage(tabuleiroImg,
+  //       0,0,
+  //       this.l_canvasObj,this.a_canvasObj)
+  //   })
+  // }
 
   CarregarImagem(numeroImg){
     return imagensPecas[numeroImg]
@@ -190,7 +190,7 @@ class InterfaceCanvas {
 
   Refresh(){
     this.LimpaCanvas()
-    this.ApresentaFundoTabuleiro()
+    //this.ApresentaFundoTabuleiro()
     this.MostrarTodasPecas()
   }
 
@@ -777,7 +777,7 @@ let uiJogador = new InterfaceCanvasJogador(canvasJogadorJS,pecasJogador,uiTabule
 let uiOponente = new InterfaceCanvasOponente(canvasOponeteJS,pecasOponente,uiTabuleiro)
 let uiCompra = new InterfaceCanvasCompra(canvasCompra,pecasCompra,uiJogador)
 uiCompra.IniciaPilhaDeCompra()
-uiTabuleiro.Iniciar()
+//uiTabuleiro.Iniciar()
 
 
 const botaoCor = document.getElementById("botaoCor");
