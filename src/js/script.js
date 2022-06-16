@@ -16,7 +16,7 @@ let a_peca = a_peca_original/reducao
 let escala_canvas = 1
 
 //Lista de imagens das Pecas
-let caminhoImagem = "./src/img/Pecas_teste/"
+let caminhoImagem = "./src/img/Pecas_A/"
 //let caminhoImagem = "./src/img/Pecas_B/B_"
 //let caminhoImagem = "./src/img/Pecas_C/C_"
 //let caminhoImagem = "./src/img/Pecas_D/D_"
