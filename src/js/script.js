@@ -289,7 +289,6 @@ class CadeiaDePecas {
       this.ponta2.tamanho ++
       // Verifica se peça se liga no tablueiro invertida ou não
       let pecaLado2 = this.novaPeca.numero.substring(1,2)
-      alert("entrou aqui")
       if(pecaLado2==this.ponta2.valor){
         this.novaPeca.Inverter()
 
