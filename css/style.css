@@ -177,3 +177,31 @@ h4{
 #cor{
     color:#f2cb05
 }
+
+/*Loja e Layout*/
+#Loja{
+    background-color: #1E70D1;
+    display: flexbox;
+    position: fixed;
+}
+#selecione{
+    background-color:#d95407
+}
+.card-deck{
+    padding-top: 0px;
+    margin-left:25px;
+    margin-right:25px;
+}
+.card-img-top{
+    padding:10px;
+    height:80%;
+    object-fit:fill;
+}
+.card-title{
+    margin-bottom:100px;
+}
+.col{
+    height:200px;
+    text-align: center;
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+}
