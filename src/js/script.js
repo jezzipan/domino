@@ -30,6 +30,7 @@ for (let lado1 = 6; lado1 >= 0; lado1--) {
   }
 }
 imagensPecas['verso'] = caminhoImagem + 'verso' + extencaoImagem
+imagensPecas['tabuleiro'] = caminhoImagem + 'tabuleiro' + extencaoImagem
 //Conjunto de valores validos de pecas para usuario digitar
 pecasValidas = Object.keys(imagensPecas)
 nPecas = pecasValidas.length
@@ -51,6 +52,20 @@ class InterfaceCanvas {
     this.centro_y = this.a_canvasObj/2
 
     this.semZoom = true
+  }
+
+  Iniciar(){
+    this.ApresentaFundoTabuleiro()
+  }
+
+  ApresentaFundoTabuleiro(){
+    let tabuleiroImg = new Image()
+    tabuleiroImg.src = this.CarregarImagem('tabuleiro')
+    tabuleiroImg.addEventListener("load",()=>{
+      this.ctx.drawImage(tabuleiroImg,
+        0,0,
+        this.l_canvasObj,this.a_canvasObj)
+    })
   }
 
   CarregarImagem(numeroImg){
@@ -175,6 +190,7 @@ class InterfaceCanvas {
 
   Refresh(){
     this.LimpaCanvas()
+    this.ApresentaFundoTabuleiro()
     this.MostrarTodasPecas()
   }
 
@@ -241,7 +257,7 @@ class CadeiaDePecas {
     this.pecaAnterior
 
     this.ponta1 = {
-      valor: 0,
+      valor: -1,
       tamanho: 0,
       sentidoHoriz: -1,
       sentidoVert: 0,
@@ -249,7 +265,7 @@ class CadeiaDePecas {
     }
 
     this.ponta2 = {
-      valor: 0,
+      valor: -1,
       tamanho: 0,
       sentidoHoriz: 1,
       sentidoVert: 0,
@@ -548,7 +564,7 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     let tabPonta1 = this.uiTabuleiro.cadeiaDePecas.ponta1.valor
     let tabPonta2 = this.uiTabuleiro.cadeiaDePecas.ponta2.valor
 
-    if(tabPonta1 == 0) {  //Caso o tabuleiro esteja vazio
+    if(tabPonta1 == -1) {  //Caso o tabuleiro esteja vazio
       return 1
     }
 
@@ -594,8 +610,7 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
             this.DesenhaRetanguloAzul()
           }
         } else if (avaliacao == 3) {
-
-
+          alert("Falta implementar lógica para quando peça entra nos duas pontas")
         }
 
       }.bind(this)
@@ -762,6 +777,7 @@ let uiJogador = new InterfaceCanvasJogador(canvasJogadorJS,pecasJogador,uiTabule
 let uiOponente = new InterfaceCanvasOponente(canvasOponeteJS,pecasOponente,uiTabuleiro)
 let uiCompra = new InterfaceCanvasCompra(canvasCompra,pecasCompra,uiJogador)
 uiCompra.IniciaPilhaDeCompra()
+uiTabuleiro.Iniciar()
 
 
 const botaoCor = document.getElementById("botaoCor");
