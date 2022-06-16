@@ -457,15 +457,13 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     this.alt_retangAzul = this.l_canvasObj/2
     this.lar_retangAzul = l_peca*0.8
 
-    this.ctx.fillStyle="#0e3659"
-    this.ctx.fillRect(this.x_retangAzul,this.y_retangAzul,
-      this.alt_retangAzul,this.lar_retangAzul)
+    this.DesenhaRetanguloAzul()
   }
 
   DesenhaRetanguloAzul(){
     this.ctx.fillStyle="#0e3659"
     this.ctx.fillRect(this.x_retangAzul,this.y_retangAzul,
-      this.alt_retangAzul,this.lar_retangAzul)
+    this.alt_retangAzul,this.lar_retangAzul)
   }
 
   AdicionaPecaNoCanvas(pontaEscolhida,numeroEscolhido){
@@ -496,7 +494,7 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     this.LimpaCanvas()
     this.DesenhaRetanguloAzul()
     this.MostrarTodasPecas()
-    this.LimparBotoesDasPecas()
+    this.LimparBotoesDasPecas(".BotaoNaPeca")
     this.TornarPecasResponsivas()
   }
 
@@ -514,7 +512,7 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
 
       let peca = this.cadeiaDePecas.arrayPecas[i]
-      let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg)
+      let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg, "BotaoNaPeca")
 
       button.onclick = function(){
         let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
@@ -532,119 +530,7 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
 
   }
 
-  CriarBotaoNaPeca(x, y, alturaPeca) {
-    //Cria um botao na posicao indicada
-    let areaCanvas = this.canvasObj.getBoundingClientRect()
-    var btn = document.createElement("button");
-    document.body.appendChild(btn);
-    btn.style.position = "absolute";
-    btn.style.left = (x + areaCanvas.left - alturaPeca/2) + "px";
-    btn.style.top = (y - alturaPeca/2 + 500) + "px";
-    btn.style.background = "none";
-    btn.style.border ="dotted";
-    btn.style.width = a_peca + "px";
-    btn.style.height = l_peca + "px";
-    btn.classList.add("BotaoNaPeca")
-    return btn;
-  }
-
-  LimparBotoesDasPecas(){
-    let botoes = document.querySelectorAll(".BotaoNaPeca")
-    botoes.forEach(function(botao) {
-      botao.remove();
-    });
-  }
-
-}
-
-class InterfaceCanvasOponente extends InterfaceCanvas {
-
-  constructor(canvasJS,cadeiaDePecas,uiTabuleiro){
-    super(canvasJS,cadeiaDePecas)
-    this.uiTabuleiro = uiTabuleiro
-
-    this.x_retangAzul = this.l_canvasObj/4
-    this.y_retangAzul = this.a_canvasObj*0.3
-    this.alt_retangAzul = this.l_canvasObj/2
-    this.lar_retangAzul = l_peca*0.8
-
-    this.ctx.fillStyle="#0e3659"
-    this.ctx.fillRect(this.x_retangAzul,this.y_retangAzul,
-      this.alt_retangAzul,this.lar_retangAzul)
-  }
-
-  DesenhaRetanguloAzul(){
-    this.ctx.fillStyle="#0e3659"
-    this.ctx.fillRect(this.x_retangAzul,this.y_retangAzul,
-      this.alt_retangAzul,this.lar_retangAzul)
-  }
-
-  CarregarImagem(numeroImg){
-    return imagensPecas['verso']
-  }
-
-  AtualizaCanvas(){
-
-    let numeroEscolhido = document.getElementById("pecaJogador").value
-    let pontaEscolhida = 2
-
-    if(checarInput(pontaEscolhida,numeroEscolhido)=="erro"){
-      return
-    }
-
-    if(this.cadeiaDePecas.tamanho==0){
-      this.cadeiaDePecas.PrimeiraPeca(numeroEscolhido,this.centro_x,this.centro_y)
-    } else {
-      this.cadeiaDePecas.AdicionaPeca(numeroEscolhido, pontaEscolhida)
-      this.cadeiaDePecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
-    }
-
-    this.Refresh()
-
-  }
-
-  Refresh(){
-    this.CentralizaPecasNoCanvas()
-    this.LimpaCanvas()
-    this.DesenhaRetanguloAzul()
-    this.MostrarTodasPecas()
-    this.LimparBotoesDasPecas()
-    this.TornarPecasResponsivas()
-  }
-
-  CentralizaPecasNoCanvas(){
-    let deslocX = this.cadeiaDePecas.arrayPecas[0].larg/2 * (this.cadeiaDePecas.tamanho - 1)
-    for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-      this.cadeiaDePecas.arrayPecas[i].x = this.centro_x - deslocX
-      deslocX -= this.cadeiaDePecas.arrayPecas[i].larg
-    }
-  }
-
-  TornarPecasResponsivas(){
-    //Adiciona um botao sobre cada peca para que ela seja
-    //responsiva ao click do mouse
-    for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-
-      let peca = this.cadeiaDePecas.arrayPecas[i]
-      let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg, peca.alt)
-
-      button.onclick = function(){
-        let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
-        this.uiTabuleiro.AdicionaPecaNoCanvas(1,nroPecaRemovida)
-        document.body.removeChild(button)
-        if(this.cadeiaDePecas.tamanho){
-          this.Refresh()
-        } else {
-          this.LimpaCanvas()
-          this.DesenhaRetanguloAzul()
-        }
-      }.bind(this)
-
-    }
-
-  }
-
-  CriarBotaoNaPeca(x, y, alturaPeca, larguraPeca) {
+  CriarBotaoNaPeca(x, y, alturaPeca, classeBotao) {
     //Cria um botao na posicao indicada
     let areaCanvas = this.canvasObj.getBoundingClientRect()
     let areaBody = document.body.getBoundingClientRect()
@@ -652,20 +538,35 @@ class InterfaceCanvasOponente extends InterfaceCanvas {
     document.body.appendChild(btn);
     btn.style.position = "absolute";
     btn.style.left = (x + areaCanvas.left - alturaPeca/2) + "px";
-    btn.style.top = (y - alturaPeca/2) + "px";
+    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca + 8.5) + "px";
     btn.style.background = "none";
     btn.style.border ="dotted";
     btn.style.width = a_peca + "px";
     btn.style.height = l_peca + "px";
-    btn.classList.add("BotaoNaPecaOponente")
+    btn.classList.add(classeBotao)
     return btn;
   }
 
-  LimparBotoesDasPecas(){
-    let botoes = document.querySelectorAll(".BotaoNaPecaOponente")
+  LimparBotoesDasPecas(classeBotao){
+    let botoes = document.querySelectorAll(classeBotao)
     botoes.forEach(function(botao) {
       botao.remove();
     });
+  }
+
+}
+
+class InterfaceCanvasOponente extends InterfaceCanvasJogador {
+
+  CarregarImagem(numeroImg){
+    return imagensPecas['verso']
+  }
+
+  Refresh(){
+    this.CentralizaPecasNoCanvas()
+    this.LimpaCanvas()
+    this.DesenhaRetanguloAzul()
+    this.MostrarTodasPecas()
   }
 
 }
@@ -690,7 +591,7 @@ class InterfaceCanvasCompra extends InterfaceCanvas {
   }
 
   MostrarCanvas(){
-    this.canvasObj.style.zIndex = "5"
+    this.canvasObj.style.zIndex = "6"
     this.canvasObj.style.background = "#0e3659"
     this.canvasObj.style.border = "1px solid #000"
     this.Refresh()
@@ -725,13 +626,13 @@ class InterfaceCanvasCompra extends InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
 
       let peca = this.cadeiaDePecas.arrayPecas[i]
-      let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg)
+      let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg, "BotaoNaPecaCompra")
 
       button.onclick = function(){
         let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
         this.uiJogador.AdicionaPecaNoCanvas(1,nroPecaRemovida)
         document.body.removeChild(button)
-        this.LimparBotoesDasPecas()
+        this.LimparBotoesDasPecas(".BotaoNaPecaCompra")
         this.EscondeCanvas()
       }.bind(this)
 
@@ -739,7 +640,7 @@ class InterfaceCanvasCompra extends InterfaceCanvas {
 
   }
 
-  CriarBotaoNaPeca(x, y, alturaPeca) {
+  CriarBotaoNaPeca(x, y, alturaPeca, classeBotao) {
     //Cria um botao na posicao indicada
     let areaCanvas = this.canvasObj.getBoundingClientRect()
     let areaBody = document.body.getBoundingClientRect()
@@ -747,18 +648,18 @@ class InterfaceCanvasCompra extends InterfaceCanvas {
     document.body.appendChild(btn);
     btn.style.position = "absolute";
     btn.style.left = (x + areaCanvas.left - alturaPeca/2) + "px";
-    btn.style.top = (y - alturaPeca/2 + 90) + "px";
+    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca + 8.5) + "px";
     btn.style.background = "none";
     btn.style.border ="dotted";
     btn.style.width = a_peca + "px";
     btn.style.height = l_peca + "px";
-    btn.style.zIndex="5";
-    btn.classList.add("BotaoNaPecaCanvas")
+    btn.style.zIndex="6";
+    btn.classList.add(classeBotao)
     return btn;
   }
 
-  LimparBotoesDasPecas(){
-    let botoes = document.querySelectorAll(".BotaoNaPecaCanvas")
+  LimparBotoesDasPecas(classeBotao){
+    let botoes = document.querySelectorAll(classeBotao)
     botoes.forEach(function(botao) {
       botao.remove();
     });
