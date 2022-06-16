@@ -547,6 +547,11 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
   AvaliaPecaNoTabuleiro(nroPeca){
     let tabPonta1 = this.uiTabuleiro.cadeiaDePecas.ponta1.valor
     let tabPonta2 = this.uiTabuleiro.cadeiaDePecas.ponta2.valor
+
+    if(tabPonta1 == 0) {  //Caso o tabuleiro esteja vazio
+      return 1
+    }
+
     let pecalado1 = nroPeca.substring(0,1)
     let pecalado2 = nroPeca.substring(1,2)
 
