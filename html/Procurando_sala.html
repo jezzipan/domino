@@ -19,7 +19,26 @@
     </div>
         <p> Procurando a sala </p>
     <div class="container">
-        <button name="cancelar" onclick=""> Cancelar </button>
+        <button  type="cancel" name="cancelar" onclick=""> Cancelar </button>
+    </div>
+</section>
+<section hidden class="sala_encontrada"> <!--Sala encontrada-->
+    <div>
+        <h4>Ebaa!!</h4>
+        <p> Uma sala foi encontrada, <br> clique em começar para jogar </p>
+    </div>
+    <div class="container">
+        <button type="" onClick=""> Começar </button>
+    </div>
+</section>
+<section hidden class="sala_nao_encontrada"> <!--Sala não encontrada-->
+    <div>
+        <h4 class="titulo"> Desculpa</h4>
+        <p> mas não foi possivel achar uma sala, <br> selecione uma das opções a seguir</p>
+    </div>
+    <div class="container">
+        <button class="btn" name="procurar" onclick="restart"> Procurar </button>
+        <button type=""  name="sair" onclick=""> Sair </button>
     </div>
 </section>
 </body>
