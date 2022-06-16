@@ -262,8 +262,8 @@ class CadeiaDePecas {
     this.arrayPecas.push(this.novaPeca)
     this.novaPeca.x = centro_x
     this.novaPeca.y = centro_y
-    this.ponta1.valor = this.novaPeca.numero.substring(0,1)
-    this.ponta2.valor = this.novaPeca.numero.substring(1,2)
+    this.PreencheNumeroDaPonta("ponta1")
+    this.PreencheNumeroDaPonta("ponta2")
     this.tamanho = this.arrayPecas.length
   }
 
@@ -274,14 +274,27 @@ class CadeiaDePecas {
       this.pecaAnterior = this.arrayPecas[0]
       this.arrayPecas.unshift(this.novaPeca)
       this.ponta1.tamanho ++
+      // Verifica se peça se liga no tablueiro invertida ou não
+      let pecaLado1 = this.novaPeca.numero.substring(0,1)
+      if(pecaLado1==this.ponta1.valor){
+        this.novaPeca.Inverter()
+      }
+      // Verifica o sentido em que a cadeia de peças está crescendo e ajuta a peça
       if(this.ponta1.sentidoVert != 0) this.novaPeca.Girar90graus()
       if(this.ponta1.sentidoHoriz == 1) this.novaPeca.Inverter()
       this.PreencheNumeroDaPonta("ponta1")
     } else if (ponta == 2){
       this.pecaAnterior = this.arrayPecas[this.tamanho-1]
       this.arrayPecas.push(this.novaPeca)
-      this.ponta2.valor = this.novaPeca.numero.substring(1,2)
       this.ponta2.tamanho ++
+      // Verifica se peça se liga no tablueiro invertida ou não
+      let pecaLado2 = this.novaPeca.numero.substring(1,2)
+      alert("entrou aqui")
+      if(pecaLado2==this.ponta2.valor){
+        this.novaPeca.Inverter()
+
+      }
+      // Verifica o sentido em que a cadeia de peças está crescendo e ajuta a peça
       if(this.ponta2.sentidoVert != 0) this.novaPeca.Girar90graus()
       if(this.ponta2.sentidoHoriz == -1) this.novaPeca.Inverter()
       this.PreencheNumeroDaPonta("ponta2")
@@ -445,12 +458,18 @@ class CadeiaDePecasJogador extends CadeiaDePecas {
     if(!this.novaPeca.vertical){
       this.novaPeca.Girar90graus()
     }
+    if(this.novaPeca.invertida){
+      this.novaPeca.Inverter()
+    }
   }
 
   AdicionaPeca(numero, ponta=2){
     super.AdicionaPeca(numero,ponta)
     if(!this.novaPeca.vertical){
       this.novaPeca.Girar90graus()
+    }
+    if(this.novaPeca.invertida){
+      this.novaPeca.Inverter()
     }
   }
 
@@ -526,6 +545,26 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     }
   }
 
+  AvaliaPecaNoTabuleiro(nroPeca){
+    let tabPonta1 = this.uiTabuleiro.cadeiaDePecas.ponta1.valor
+    let tabPonta2 = this.uiTabuleiro.cadeiaDePecas.ponta2.valor
+    let pecalado1 = nroPeca.substring(0,1)
+    let pecalado2 = nroPeca.substring(1,2)
+
+    let ponta1valida = (pecalado1==tabPonta1 || pecalado2==tabPonta1)
+    let ponta2valida = (pecalado1==tabPonta2 || pecalado2==tabPonta2)
+
+    if (ponta1valida && !ponta2valida) {
+      return 1
+    } else if (!ponta1valida && ponta2valida) {
+      return 2
+    } else if (ponta1valida && ponta2valida) {
+      return 3
+    } else {
+      return 0
+    }
+  }
+
   TornarPecasResponsivas(){
     //Adiciona um botao sobre cada peca para que ela seja
     //responsiva ao click do mouse
@@ -535,15 +574,26 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
       let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg, "BotaoNaPeca")
 
       button.onclick = function(){
-        let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
-        this.uiTabuleiro.AdicionaPecaNoCanvas(1,nroPecaRemovida)
-        document.body.removeChild(button)
-        if(this.cadeiaDePecas.tamanho){
-          this.Refresh()
-        } else {
-          this.LimpaCanvas()
-          this.DesenhaRetanguloAzul()
+        let nroPeca = peca.numero
+        let avaliacao = this.AvaliaPecaNoTabuleiro(nroPeca)
+
+        if (avaliacao == 0) {
+          return
+        } else if (avaliacao == 1 || avaliacao == 2) {
+          let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
+          this.uiTabuleiro.AdicionaPecaNoCanvas(avaliacao,nroPeca)
+          document.body.removeChild(button)
+          if(this.cadeiaDePecas.tamanho){
+            this.Refresh()
+          } else {
+            this.LimpaCanvas()
+            this.DesenhaRetanguloAzul()
+          }
+        } else if (avaliacao == 3) {
+
+
         }
+
       }.bind(this)
 
     }
