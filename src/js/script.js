@@ -51,7 +51,6 @@ class InterfaceCanvas {
     this.centro_y = this.a_canvasObj/2
 
     this.semZoom = true
-
   }
 
   CarregarImagem(numeroImg){
@@ -263,6 +262,8 @@ class CadeiaDePecas {
     this.arrayPecas.push(this.novaPeca)
     this.novaPeca.x = centro_x
     this.novaPeca.y = centro_y
+    this.ponta1.valor = this.novaPeca.numero.substring(0,1)
+    this.ponta2.valor = this.novaPeca.numero.substring(1,2)
     this.tamanho = this.arrayPecas.length
   }
 
@@ -275,15 +276,34 @@ class CadeiaDePecas {
       this.ponta1.tamanho ++
       if(this.ponta1.sentidoVert != 0) this.novaPeca.Girar90graus()
       if(this.ponta1.sentidoHoriz == 1) this.novaPeca.Inverter()
+      this.PreencheNumeroDaPonta("ponta1")
     } else if (ponta == 2){
       this.pecaAnterior = this.arrayPecas[this.tamanho-1]
       this.arrayPecas.push(this.novaPeca)
+      this.ponta2.valor = this.novaPeca.numero.substring(1,2)
       this.ponta2.tamanho ++
       if(this.ponta2.sentidoVert != 0) this.novaPeca.Girar90graus()
       if(this.ponta2.sentidoHoriz == -1) this.novaPeca.Inverter()
+      this.PreencheNumeroDaPonta("ponta2")
     }
 
     this.tamanho = this.arrayPecas.length
+  }
+
+  PreencheNumeroDaPonta(ponta){
+    if(this[ponta].sentidoVert + this[ponta].sentidoHoriz == 1){
+      if(this.novaPeca.invertida){
+        this[ponta].valor = this.novaPeca.numero.substring(0,1)
+      } else {
+        this[ponta].valor = this.novaPeca.numero.substring(1,2)
+      }
+    } else if(this[ponta].sentidoVert + this[ponta].sentidoHoriz == -1) {
+      if(this.novaPeca.invertida){
+        this[ponta].valor = this.novaPeca.numero.substring(1,2)
+      } else {
+        this[ponta].valor = this.novaPeca.numero.substring(0,1)
+      }
+    }
   }
 
   AjustaCadeia(){
