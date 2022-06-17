@@ -254,19 +254,19 @@ class InterfaceCanvas {
     }
   }
 
-  CriarBotaoNaPeca(x, y, alturaPeca, classeBotao) {
+  CriarBotaoNaPeca(x, y, larguraPeca, alturaPeca, classeBotao) {
     //Cria um botao na posicao indicada
     let areaCanvas = this.canvasObj.getBoundingClientRect()
     let areaBody = document.body.getBoundingClientRect()
     var btn = document.createElement("button");
     document.body.appendChild(btn);
     btn.style.position = "absolute";
-    btn.style.left = (x + areaCanvas.left - alturaPeca/2) + "px";
-    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca + 8.5) + "px";
+    btn.style.left = (x + areaCanvas.left - larguraPeca/2) + "px";
+    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca/2 + 8.5) + "px";
     btn.style.background = "none";
     btn.style.border ="dotted";
-    btn.style.width = a_peca + "px";
-    btn.style.height = l_peca + "px";
+    btn.style.width = larguraPeca + "px";
+    btn.style.height = alturaPeca + "px";
     btn.style.zIndex="6";
     btn.classList.add(classeBotao)
     return btn;
@@ -641,7 +641,7 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
 
       let peca = this.cadeiaDePecas.arrayPecas[i]
-      let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg, "BotaoNaPeca")
+      let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg, peca.alt, "BotaoNaPeca")
 
       button.onclick = function(){
         let nroPeca = peca.numero
@@ -654,8 +654,9 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
 
           let pecaPt1 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[0]
           let pecaPt2 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[this.uiTabuleiro.cadeiaDePecas.tamanho-1]
-          let botaoPt1 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt1.x, pecaPt1.y, pecaPt1.larg,"BotaoEscolha")
-          let botaoPt2 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt2.x, pecaPt2.y, pecaPt2.larg,"BotaoEscolha")
+
+          let botaoPt1 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt1.x, pecaPt1.y, pecaPt1.larg, pecaPt1.alt,"BotaoEscolha")
+          let botaoPt2 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt2.x, pecaPt2.y, pecaPt2.larg, pecaPt2.alt,"BotaoEscolha")
 
           botaoPt1.onclick = function(){
             this.uiTabuleiro.LimparBotoesDasPecas(".BotaoEscolha")
@@ -753,7 +754,7 @@ class InterfaceCanvasCompra extends InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
 
       let peca = this.cadeiaDePecas.arrayPecas[i]
-      let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg, "BotaoNaPecaCompra")
+      let button = this.CriarBotaoNaPeca(peca.x, peca.y, peca.larg, peca.alt, "BotaoNaPecaCompra")
 
       button.onclick = function(){
         let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
