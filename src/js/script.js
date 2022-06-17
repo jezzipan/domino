@@ -161,8 +161,8 @@ class InterfaceCanvas {
 
   LimpaCanvas(){
 
-    let nova_largura = this.canvasObj.width*this.escala_canvas
-    let nova_altura = this.canvasObj.height*this.escala_canvas
+    let nova_largura = this.l_canvasObj*this.escala_canvas
+    let nova_altura = this.a_canvasObj*this.escala_canvas
     let sobra_largura = nova_largura - this.l_canvasObj
     let sobra_altura = nova_altura - this.a_canvasObj
 
@@ -258,15 +258,23 @@ class InterfaceCanvas {
     //Cria um botao na posicao indicada
     let areaCanvas = this.canvasObj.getBoundingClientRect()
     let areaBody = document.body.getBoundingClientRect()
-    var btn = document.createElement("button");
+    let escala = this.escala_canvas
+    var btn = document.createElement("button")
     document.body.appendChild(btn);
+
+    let centroCanvas_x = areaCanvas.left + this.l_canvasObj/2
+    let centroCanvas_y = areaCanvas.top - areaBody.top + this.a_canvasObj/2
+
+    x = (x-centroCanvas_x)/escala + centroCanvas_x
+    y = (y-centroCanvas_y)/escala + centroCanvas_y
+
     btn.style.position = "absolute";
-    btn.style.left = (x + areaCanvas.left - larguraPeca/2) + "px";
-    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca/2 + 8.5) + "px";
+    btn.style.left = (x + areaCanvas.left - larguraPeca/escala/2) + "px";
+    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca/escala/2 + 8.5/escala) + "px";
     btn.style.background = "none";
     btn.style.border ="dotted";
-    btn.style.width = larguraPeca + "px";
-    btn.style.height = alturaPeca + "px";
+    btn.style.width = larguraPeca/escala + "px";
+    btn.style.height = alturaPeca/escala + "px";
     btn.style.zIndex="6";
     btn.classList.add(classeBotao)
     return btn;
@@ -633,6 +641,10 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
       this.LimpaCanvas()
       this.DesenhaRetanguloAzul()
     }
+  }
+
+  AjustaPosicaoBotaoTabuleiro(){
+
   }
 
   TornarPecasResponsivas(){
