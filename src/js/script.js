@@ -64,7 +64,7 @@ class InterfaceCanvas {
 
     let tabuleiroImg = new Image()
     tabuleiroImg.src = this.CarregarImagem('tabuleiro')
-    
+
     this.ctx.save()
     this.ctx.translate(this.centro_x,this.centro_y)
     tabuleiroImg.addEventListener("load",()=>{
@@ -252,6 +252,31 @@ class InterfaceCanvas {
       this.ZoomOut()
       this.semZoom = false
     }
+  }
+
+  CriarBotaoNaPeca(x, y, alturaPeca, classeBotao) {
+    //Cria um botao na posicao indicada
+    let areaCanvas = this.canvasObj.getBoundingClientRect()
+    let areaBody = document.body.getBoundingClientRect()
+    var btn = document.createElement("button");
+    document.body.appendChild(btn);
+    btn.style.position = "absolute";
+    btn.style.left = (x + areaCanvas.left - alturaPeca/2) + "px";
+    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca + 8.5) + "px";
+    btn.style.background = "none";
+    btn.style.border ="dotted";
+    btn.style.width = a_peca + "px";
+    btn.style.height = l_peca + "px";
+    btn.style.zIndex="6";
+    btn.classList.add(classeBotao)
+    return btn;
+  }
+
+  LimparBotoesDasPecas(classeBotao){
+    let botoes = document.querySelectorAll(classeBotao)
+    botoes.forEach(function(botao) {
+      botao.remove();
+    });
   }
 
 }
@@ -572,7 +597,13 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     let tabPonta1 = this.uiTabuleiro.cadeiaDePecas.ponta1.valor
     let tabPonta2 = this.uiTabuleiro.cadeiaDePecas.ponta2.valor
 
-    if(tabPonta1 == -1) {  //Caso o tabuleiro esteja vazio
+    if(tabPonta1 == -1) {
+    //Caso o tabuleiro esteja vazio
+      return 1
+    }
+
+    if(uiTabuleiro.cadeiaDePecas.tamanho==1 && tabPonta1==tabPonta2){
+    //Caso haja apenas 1 peça no tabuleiro com 2 lados iguais
       return 1
     }
 
@@ -593,6 +624,17 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     }
   }
 
+  AdicionaPecaNoTabuleiro(avaliacao,peca){
+    let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
+    this.uiTabuleiro.AdicionaPecaNoCanvas(avaliacao,nroPecaRemovida)
+    if(this.cadeiaDePecas.tamanho){
+      this.Refresh()
+    } else {
+      this.LimpaCanvas()
+      this.DesenhaRetanguloAzul()
+    }
+  }
+
   TornarPecasResponsivas(){
     //Adiciona um botao sobre cada peca para que ela seja
     //responsiva ao click do mouse
@@ -607,48 +649,36 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
 
         if (avaliacao == 0) {
           return
-        } else if (avaliacao == 1 || avaliacao == 2) {
-          let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
-          this.uiTabuleiro.AdicionaPecaNoCanvas(avaliacao,nroPeca)
-          document.body.removeChild(button)
-          if(this.cadeiaDePecas.tamanho){
-            this.Refresh()
-          } else {
-            this.LimpaCanvas()
-            this.DesenhaRetanguloAzul()
-          }
         } else if (avaliacao == 3) {
-          alert("Falta implementar lógica para quando peça entra nos duas pontas")
-        }
+          //alert("Falta implementar lógica para quando peça entra nas duas pontas")
 
+          let pecaPt1 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[0]
+          let pecaPt2 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[this.uiTabuleiro.cadeiaDePecas.tamanho-1]
+          let botaoPt1 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt1.x, pecaPt1.y, pecaPt1.larg,"BotaoEscolha")
+          let botaoPt2 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt2.x, pecaPt2.y, pecaPt2.larg,"BotaoEscolha")
+
+          botaoPt1.onclick = function(){
+            this.uiTabuleiro.LimparBotoesDasPecas(".BotaoEscolha")
+            avaliacao = 1
+            document.body.removeChild(button)
+            this.AdicionaPecaNoTabuleiro(avaliacao,peca)
+          }.bind(this)
+
+          botaoPt2.onclick = function(){
+            this.uiTabuleiro.LimparBotoesDasPecas(".BotaoEscolha")
+            avaliacao = 2
+            document.body.removeChild(button)
+            this.AdicionaPecaNoTabuleiro(avaliacao,peca)
+          }.bind(this)
+
+        } else if (avaliacao==1 || avaliacao==2){
+          document.body.removeChild(button)
+          this.AdicionaPecaNoTabuleiro(avaliacao,peca)
+        }
       }.bind(this)
 
     }
 
-  }
-
-  CriarBotaoNaPeca(x, y, alturaPeca, classeBotao) {
-    //Cria um botao na posicao indicada
-    let areaCanvas = this.canvasObj.getBoundingClientRect()
-    let areaBody = document.body.getBoundingClientRect()
-    var btn = document.createElement("button");
-    document.body.appendChild(btn);
-    btn.style.position = "absolute";
-    btn.style.left = (x + areaCanvas.left - alturaPeca/2) + "px";
-    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca + 8.5) + "px";
-    btn.style.background = "none";
-    btn.style.border ="dotted";
-    btn.style.width = a_peca + "px";
-    btn.style.height = l_peca + "px";
-    btn.classList.add(classeBotao)
-    return btn;
-  }
-
-  LimparBotoesDasPecas(classeBotao){
-    let botoes = document.querySelectorAll(classeBotao)
-    botoes.forEach(function(botao) {
-      botao.remove();
-    });
   }
 
 }
@@ -737,30 +767,6 @@ class InterfaceCanvasCompra extends InterfaceCanvas {
 
   }
 
-  CriarBotaoNaPeca(x, y, alturaPeca, classeBotao) {
-    //Cria um botao na posicao indicada
-    let areaCanvas = this.canvasObj.getBoundingClientRect()
-    let areaBody = document.body.getBoundingClientRect()
-    var btn = document.createElement("button");
-    document.body.appendChild(btn);
-    btn.style.position = "absolute";
-    btn.style.left = (x + areaCanvas.left - alturaPeca/2) + "px";
-    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca + 8.5) + "px";
-    btn.style.background = "none";
-    btn.style.border ="dotted";
-    btn.style.width = a_peca + "px";
-    btn.style.height = l_peca + "px";
-    btn.style.zIndex="6";
-    btn.classList.add(classeBotao)
-    return btn;
-  }
-
-  LimparBotoesDasPecas(classeBotao){
-    let botoes = document.querySelectorAll(classeBotao)
-    botoes.forEach(function(botao) {
-      botao.remove();
-    });
-  }
 
 }
 
