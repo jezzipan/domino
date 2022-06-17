@@ -13,7 +13,6 @@ const a_peca_original = 100
 const reducao = 2.5
 let l_peca = l_peca_original/reducao
 let a_peca = a_peca_original/reducao
-let escala_canvas = 1
 
 //Lista de imagens das Pecas
 let caminhoImagem = "./src/img/Pecas_A/"
@@ -51,22 +50,32 @@ class InterfaceCanvas {
     this.centro_x = this.l_canvasObj/2
     this.centro_y = this.a_canvasObj/2
 
+    this.escala_canvas = 1
     this.semZoom = true
   }
 
-  // Iniciar(){
-  //   this.ApresentaFundoTabuleiro()
-  // }
-  //
-  // ApresentaFundoTabuleiro(){
-  //   let tabuleiroImg = new Image()
-  //   tabuleiroImg.src = this.CarregarImagem('tabuleiro')
-  //   tabuleiroImg.addEventListener("load",()=>{
-  //     this.ctx.drawImage(tabuleiroImg,
-  //       0,0,
-  //       this.l_canvasObj,this.a_canvasObj)
-  //   })
-  // }
+  Iniciar(){
+    this.ApresentaTabuleiro()
+  }
+
+  ApresentaTabuleiro(){
+    let nova_largura = this.l_canvasObj*this.escala_canvas
+    let nova_altura = this.a_canvasObj*this.escala_canvas
+
+    let tabuleiroImg = new Image()
+    tabuleiroImg.src = this.CarregarImagem('tabuleiro')
+    
+    this.ctx.save()
+    this.ctx.translate(this.centro_x,this.centro_y)
+    tabuleiroImg.addEventListener("load",()=>{
+      this.ctx.drawImage(tabuleiroImg,
+        -nova_largura/2,-nova_altura/2,
+        nova_largura,nova_altura)
+      this.ctx.restore()
+
+      this.MostrarTodasPecas()
+    })
+  }
 
   CarregarImagem(numeroImg){
     return imagensPecas[numeroImg]
@@ -152,8 +161,8 @@ class InterfaceCanvas {
 
   LimpaCanvas(){
 
-    let nova_largura = this.canvasObj.width*escala_canvas
-    let nova_altura = this.canvasObj.height*escala_canvas
+    let nova_largura = this.canvasObj.width*this.escala_canvas
+    let nova_altura = this.canvasObj.height*this.escala_canvas
     let sobra_largura = nova_largura - this.l_canvasObj
     let sobra_altura = nova_altura - this.a_canvasObj
 
@@ -190,15 +199,14 @@ class InterfaceCanvas {
 
   Refresh(){
     this.LimpaCanvas()
-    //this.ApresentaFundoTabuleiro()
-    this.MostrarTodasPecas()
+    this.ApresentaTabuleiro()
   }
 
   ZoomOut(escala=.7){
     this.ctx.translate(this.centro_x,this.centro_y)
     this.ctx.scale(escala,escala)
     this.ctx.translate(-this.centro_x,-this.centro_y)
-    escala_canvas /= escala
+    this.escala_canvas /= escala
     this.Refresh()
   }
 
@@ -206,7 +214,7 @@ class InterfaceCanvas {
     this.ctx.translate(this.centro_x,this.centro_y)
     this.ctx.scale(escala,escala)
     this.ctx.translate(-this.centro_x,-this.centro_y)
-    escala_canvas *= escala
+    this.escala_canvas /= escala
     this.Refresh()
   }
 
@@ -777,7 +785,7 @@ let uiJogador = new InterfaceCanvasJogador(canvasJogadorJS,pecasJogador,uiTabule
 let uiOponente = new InterfaceCanvasOponente(canvasOponeteJS,pecasOponente,uiTabuleiro)
 let uiCompra = new InterfaceCanvasCompra(canvasCompra,pecasCompra,uiJogador)
 uiCompra.IniciaPilhaDeCompra()
-//uiTabuleiro.Iniciar()
+uiTabuleiro.Iniciar()
 
 
 const botaoCor = document.getElementById("botaoCor");
