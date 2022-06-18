@@ -254,7 +254,7 @@ class InterfaceCanvas {
     }
   }
 
-  CriarBotaoNaPeca(x, y, larguraPeca, alturaPeca, classeBotao) {
+  CriarBotaoNaPeca(x, y, larguraPeca, alturaPeca, classeBotao, ressaltarPeca=false) {
     //Cria um botao na posicao indicada
     let areaCanvas = this.canvasObj.getBoundingClientRect()
     let areaBody = document.body.getBoundingClientRect()
@@ -273,6 +273,7 @@ class InterfaceCanvas {
     btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca/escala/2 + 8.5) + "px";
     btn.style.background = "none";
     btn.style.border ="1px dotted";
+    if(ressaltarPeca){btn.style.boxShadow = "0 0 40px #ffff00"}
     btn.style.width = larguraPeca/escala + "px";
     btn.style.height = alturaPeca/escala + "px";
     btn.style.zIndex="6";
@@ -667,21 +668,25 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
           let pecaPt1 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[0]
           let pecaPt2 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[this.uiTabuleiro.cadeiaDePecas.tamanho-1]
 
-          let botaoPt1 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt1.x, pecaPt1.y, pecaPt1.larg, pecaPt1.alt,"BotaoEscolha")
-          let botaoPt2 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt2.x, pecaPt2.y, pecaPt2.larg, pecaPt2.alt,"BotaoEscolha")
+          this.LimparBotoesDasPecas(".BotaoNaPeca")
+
+          let botaoPt1 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt1.x, pecaPt1.y, pecaPt1.larg, pecaPt1.alt,"BotaoEscolha", true)
+          let botaoPt2 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt2.x, pecaPt2.y, pecaPt2.larg, pecaPt2.alt,"BotaoEscolha", true)
 
           botaoPt1.onclick = function(){
             this.uiTabuleiro.LimparBotoesDasPecas(".BotaoEscolha")
             avaliacao = 1
-            document.body.removeChild(button)
+            //document.body.removeChild(button)
             this.AdicionaPecaNoTabuleiro(avaliacao,peca)
+            this.TornarPecasResponsivas()
           }.bind(this)
 
           botaoPt2.onclick = function(){
             this.uiTabuleiro.LimparBotoesDasPecas(".BotaoEscolha")
             avaliacao = 2
-            document.body.removeChild(button)
+            //document.body.removeChild(button)
             this.AdicionaPecaNoTabuleiro(avaliacao,peca)
+            this.TornarPecasResponsivas()
           }.bind(this)
 
         } else if (avaliacao==1 || avaliacao==2){
