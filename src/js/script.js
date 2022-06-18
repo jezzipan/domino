@@ -219,30 +219,38 @@ class InterfaceCanvas {
   }
 
   MoveUp(){
+    let incrementoY = 30*this.escala_canvas
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-      this.cadeiaDePecas.arrayPecas[i].y+=20
+      this.cadeiaDePecas.arrayPecas[i].y += incrementoY
     }
+    this.MoverBotoesDasPecas(".BotaoEscolha",0,incrementoY)
     this.Refresh()
   }
 
   MoveDown(){
+    let incrementoY = -30*this.escala_canvas
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-      this.cadeiaDePecas.arrayPecas[i].y-=20
+      this.cadeiaDePecas.arrayPecas[i].y += incrementoY
     }
+    this.MoverBotoesDasPecas(".BotaoEscolha",0,incrementoY)
     this.Refresh()
   }
 
   MoveLeft(){
+    let incrementoX = 30*this.escala_canvas
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-      this.cadeiaDePecas.arrayPecas[i].x+=20
+      this.cadeiaDePecas.arrayPecas[i].x += incrementoX
     }
+    this.MoverBotoesDasPecas(".BotaoEscolha",incrementoX,0)
     this.Refresh()
   }
 
   MoveRight(){
+    let incrementoX = -30*this.escala_canvas
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
-      this.cadeiaDePecas.arrayPecas[i].x-=20
+      this.cadeiaDePecas.arrayPecas[i].x += incrementoX
     }
+    this.MoverBotoesDasPecas(".BotaoEscolha",incrementoX,0)
     this.Refresh()
   }
 
@@ -256,27 +264,29 @@ class InterfaceCanvas {
 
   CriarBotaoNaPeca(x, y, larguraPeca, alturaPeca, classeBotao, ressaltarPeca=false) {
     //Cria um botao na posicao indicada
-    let areaCanvas = this.canvasObj.getBoundingClientRect()
-    let areaBody = document.body.getBoundingClientRect()
-    let escala = this.escala_canvas
+
     var btn = document.createElement("button")
     document.body.appendChild(btn);
 
+    let areaCanvas = this.canvasObj.getBoundingClientRect()
+    let areaBody = document.body.getBoundingClientRect()
+    let escala = this.escala_canvas
+
     let centroCanvas_x = areaBody.left + this.l_canvasObj/2
     let centroCanvas_y = areaBody.top + this.a_canvasObj/2
-
     x = (x-centroCanvas_x)/escala + centroCanvas_x
     y = (y-centroCanvas_y)/escala + centroCanvas_y
 
     btn.style.position = "absolute";
     btn.style.left = (x + areaCanvas.left - areaBody.left - larguraPeca/escala/2 + 8/escala) + "px";
     btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca/escala/2 + 8.5/escala) + "px";
-    btn.style.background = "none";
-    btn.style.border ="1px dotted";
-    if(ressaltarPeca){btn.style.boxShadow = "0 0 40px #ffff00"}
     btn.style.width = larguraPeca/escala + "px";
     btn.style.height = alturaPeca/escala + "px";
+
+    btn.style.background = "none";
+    btn.style.border ="1px dotted";
     btn.style.zIndex="6";
+    if(ressaltarPeca){btn.style.boxShadow = "0 0 40px #ffff00"}
     btn.classList.add(classeBotao)
     return btn;
   }
@@ -285,6 +295,16 @@ class InterfaceCanvas {
     let botoes = document.querySelectorAll(classeBotao)
     botoes.forEach(function(botao) {
       botao.remove();
+    });
+  }
+
+  MoverBotoesDasPecas(classeBotao,incrementoX,incrementoY){
+    let botoes = document.querySelectorAll(classeBotao)
+    botoes.forEach(function(botao) {
+      let yOriginal = parseFloat(botao.style.top.split('px')[0])
+      let xOriginal = parseFloat(botao.style.left.split('px')[0])
+      botao.style.top = (yOriginal + incrementoY) + "px"
+      botao.style.left = (xOriginal + incrementoX) + "px"
     });
   }
 
@@ -661,10 +681,10 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
         } else if (avaliacao == 3) {
           //alert("Falta implementar lógica para quando peça entra nas duas pontas")
 
+          this.LimparBotoesDasPecas(".BotaoNaPeca")
+
           let pecaPt1 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[0]
           let pecaPt2 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[this.uiTabuleiro.cadeiaDePecas.tamanho-1]
-
-          this.LimparBotoesDasPecas(".BotaoNaPeca")
 
           let botaoPt1 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt1.x, pecaPt1.y, pecaPt1.larg, pecaPt1.alt,"BotaoEscolha", true)
           let botaoPt2 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt2.x, pecaPt2.y, pecaPt2.larg, pecaPt2.alt,"BotaoEscolha", true)
