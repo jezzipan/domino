@@ -50,6 +50,11 @@ class InterfaceCanvas {
     this.centro_x = this.l_canvasObj/2
     this.centro_y = this.a_canvasObj/2
 
+    this.limiteEsquerda = 0
+    this.limiteDireita = this.l_canvasObj
+    this.limiteSuperior = 0
+    this.limiteInferior = this.a_canvasObj
+
     this.escala_canvas = 1
     this.semZoom = true
   }
@@ -183,11 +188,6 @@ class InterfaceCanvas {
 
     this.AdicionaPecaNoCanvas(pontaEscolhida,numeroEscolhido)
 
-    this.cadeiaDePecas.AtualizaPosicaoLimiteCadeia()
-    console.log(this.cadeiaDePecas.minX)
-    console.log(this.cadeiaDePecas.maxX)
-    console.log(this.cadeiaDePecas.minY)
-    console.log(this.cadeiaDePecas.maxY)
   }
 
   AdicionaPecaNoCanvas(pontaEscolhida,numeroEscolhido){
@@ -197,6 +197,7 @@ class InterfaceCanvas {
       this.cadeiaDePecas.AdicionaPeca(numeroEscolhido, pontaEscolhida)
       this.cadeiaDePecas.AjustaCadeia()
       this.cadeiaDePecas.AtualizaCoordenadasNovaPeca(pontaEscolhida)
+      this.cadeiaDePecas.AtualizaPosicaoLimiteCadeia()
       this.VerificaZoom()
     }
     this.MostrarPecaNova()
@@ -207,11 +208,31 @@ class InterfaceCanvas {
     this.ApresentaTabuleiro()
   }
 
+  AjustarLimitesPlotagem(){
+    // console.log("Antes")
+    // console.log("esquerda: " + this.limiteEsquerda)
+    // console.log("direita: " + this.limiteDireita)
+    // console.log("superior: " + this.limiteSuperior)
+    // console.log("inferior: " + this.limiteInferior)
+    let ajusteHorizontal = this.l_canvasObj*(this.escala_canvas -1)/2
+    let ajusteVertical = this.a_canvasObj*(this.escala_canvas -1)/2
+    this.limiteEsquerda = 0 - ajusteHorizontal
+    this.limiteDireita = this.l_canvasObj + ajusteHorizontal
+    this.limiteSuperior = 0 - ajusteVertical
+    this.limiteInferior = this.a_canvasObj + ajusteVertical
+    // console.log("Depois - nova escala: " + this.escala_canvas)
+    // console.log("esquerda: " + this.limiteEsquerda)
+    // console.log("direita: " + this.limiteDireita)
+    // console.log("superior: " + this.limiteSuperior)
+    // console.log("inferior: " + this.limiteInferior)
+  }
+
   ZoomOut(escala=.7){
     this.ctx.translate(this.centro_x,this.centro_y)
     this.ctx.scale(escala,escala)
     this.ctx.translate(-this.centro_x,-this.centro_y)
     this.escala_canvas /= escala
+    this.AjustarLimitesPlotagem()
     this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
@@ -221,6 +242,7 @@ class InterfaceCanvas {
     this.ctx.scale(escala,escala)
     this.ctx.translate(-this.centro_x,-this.centro_y)
     this.escala_canvas /= escala
+    this.AjustarLimitesPlotagem()
     this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
@@ -230,6 +252,7 @@ class InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].y += incrementoY
     }
+    this.cadeiaDePecas. AtualizaPosicaoLimiteCadeia()
     this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
@@ -239,6 +262,7 @@ class InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].y += incrementoY
     }
+    this.cadeiaDePecas. AtualizaPosicaoLimiteCadeia()
     this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
@@ -248,6 +272,7 @@ class InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].x += incrementoX
     }
+    this.cadeiaDePecas. AtualizaPosicaoLimiteCadeia()
     this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
@@ -257,6 +282,7 @@ class InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].x += incrementoX
     }
+    this.cadeiaDePecas. AtualizaPosicaoLimiteCadeia()
     this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
@@ -275,17 +301,21 @@ class InterfaceCanvas {
     var btn = document.createElement("button")
     document.body.appendChild(btn);
 
-    this.PosicionarBotaoNaPeca(peca,btn)
-
     btn.style.background = "none";
     btn.style.border ="1px dotted";
-    btn.style.zIndex="6";
-    if(ressaltarPeca){btn.style.boxShadow = "0 0 40px #ffff00"}
+    btn.style.zIndex="4";
+
     btn.classList.add(classeBotao)
+
+    this.PosicionarBotaoNaPeca(peca,btn,ressaltarPeca)
+
     return btn;
   }
 
-  PosicionarBotaoNaPeca(peca,btn){
+  PosicionarBotaoNaPeca(peca,btn,ressaltarPeca){
+    btn.disabled = false
+    if(ressaltarPeca){btn.style.boxShadow = "0 0 40px #ffff00"}
+
     let areaCanvas = this.canvasObj.getBoundingClientRect()
     let areaBody = document.body.getBoundingClientRect()
     let escala = this.escala_canvas
@@ -296,12 +326,25 @@ class InterfaceCanvas {
     let y = peca.y
     x = (x-centroCanvas_x)/escala + centroCanvas_x
     y = (y-centroCanvas_y)/escala + centroCanvas_y
+    let xPlot = (x + areaCanvas.left - areaBody.left - peca.larg/escala/2 + 8/escala)
+    let yPlot = (y + areaCanvas.top - areaBody.top - peca.alt/escala/2 + 8.5/escala)
 
     btn.style.position = "absolute";
-    btn.style.left = (x + areaCanvas.left - areaBody.left - peca.larg/escala/2 + 8/escala) + "px";
-    btn.style.top = (y + areaCanvas.top - areaBody.top - peca.alt/escala/2 + 8.5/escala) + "px";
+    btn.style.left = xPlot + "px";
+    btn.style.top = yPlot + "px";
     btn.style.width = peca.larg/escala + "px";
     btn.style.height = peca.alt/escala + "px";
+
+    //Desabilita o botao caso a peça saia dos limites do canvas
+    if( (peca.x - peca.larg/2) < this.limiteEsquerda ||
+        (peca.x + peca.larg/2) > this.limiteDireita ||
+        (peca.y - peca.alt/2) < this.limiteSuperior ||
+        (peca.y + peca.alt/2) > this.limiteInferior ){
+          console.log("entrou aqui")
+          btn.disabled = true
+          btn.style.boxShadow = "none"
+        }
+
   }
 
   LimparBotoesDasPecas(classeBotao){
@@ -316,8 +359,8 @@ class InterfaceCanvas {
     if (botoes.length > 0){
       let pecaPt1 = this.cadeiaDePecas.arrayPecas[0]
       let pecaPt2 = this.cadeiaDePecas.arrayPecas[this.cadeiaDePecas.tamanho-1]
-      this.PosicionarBotaoNaPeca(pecaPt1,botoes[0])
-      this.PosicionarBotaoNaPeca(pecaPt2,botoes[1])
+      this.PosicionarBotaoNaPeca(pecaPt1,botoes[0],true)
+      this.PosicionarBotaoNaPeca(pecaPt2,botoes[1],true)
     }
   }
 
@@ -396,7 +439,7 @@ class CadeiaDePecas {
     }
 
     this.tamanho = this.arrayPecas.length
-    this.AtualizaPosicaoLimiteCadeia()
+
   }
 
   PreencheNumeroDaPonta(ponta){
@@ -508,12 +551,20 @@ class CadeiaDePecas {
   }
 
   AtualizaPosicaoLimiteCadeia(){
-    this.arrayPecas.forEach(function(peca){
-      if (peca.x + peca.larg/2 > this.maxX) {this.maxX = peca.x + peca.larg/2}
-      if (peca.x - peca.larg/2 < this.minX) {this.minX = peca.x - peca.larg/2}
-      if (peca.y + peca.alt/2 > this.maxY) {this.maxY = peca.y + peca.alt/2}
-      if (peca.y - peca.alt/2 < this.minY) {this.minY = peca.y - peca.alt/2}
-    }.bind(this));
+    if(this.tamanho>0){
+      let pecaBase = this.arrayPecas[0]
+      this.minX = this.arrayPecas[0].x - pecaBase.larg/2
+      this.maxX = this.arrayPecas[0].x + pecaBase.larg/2
+      this.minY = this.arrayPecas[0].y - pecaBase.alt/2
+      this.maxY = this.arrayPecas[0].y + pecaBase.alt/2
+      this.arrayPecas.forEach(function(peca){
+        if (peca.x + peca.larg/2 > this.maxX) {this.maxX = peca.x + peca.larg/2}
+        if (peca.x - peca.larg/2 < this.minX) {this.minX = peca.x - peca.larg/2}
+        if (peca.y + peca.alt/2 > this.maxY) {this.maxY = peca.y + peca.alt/2}
+        if (peca.y - peca.alt/2 < this.minY) {this.minY = peca.y - peca.alt/2}
+      }.bind(this));
+    }
+
   }
 
 }
