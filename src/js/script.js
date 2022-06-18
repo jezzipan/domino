@@ -183,6 +183,11 @@ class InterfaceCanvas {
 
     this.AdicionaPecaNoCanvas(pontaEscolhida,numeroEscolhido)
 
+    this.cadeiaDePecas.AtualizaPosicaoLimiteCadeia()
+    console.log(this.cadeiaDePecas.minX)
+    console.log(this.cadeiaDePecas.maxX)
+    console.log(this.cadeiaDePecas.minY)
+    console.log(this.cadeiaDePecas.maxY)
   }
 
   AdicionaPecaNoCanvas(pontaEscolhida,numeroEscolhido){
@@ -207,6 +212,7 @@ class InterfaceCanvas {
     this.ctx.scale(escala,escala)
     this.ctx.translate(-this.centro_x,-this.centro_y)
     this.escala_canvas /= escala
+    this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
 
@@ -215,6 +221,7 @@ class InterfaceCanvas {
     this.ctx.scale(escala,escala)
     this.ctx.translate(-this.centro_x,-this.centro_y)
     this.escala_canvas /= escala
+    this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
 
@@ -223,7 +230,7 @@ class InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].y += incrementoY
     }
-    this.MoverBotoesDasPecas(".BotaoEscolha",0,incrementoY)
+    this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
 
@@ -232,7 +239,7 @@ class InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].y += incrementoY
     }
-    this.MoverBotoesDasPecas(".BotaoEscolha",0,incrementoY)
+    this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
 
@@ -241,7 +248,7 @@ class InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].x += incrementoX
     }
-    this.MoverBotoesDasPecas(".BotaoEscolha",incrementoX,0)
+    this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
 
@@ -250,7 +257,7 @@ class InterfaceCanvas {
     for(let i=0; i < this.cadeiaDePecas.tamanho; i++){
       this.cadeiaDePecas.arrayPecas[i].x += incrementoX
     }
-    this.MoverBotoesDasPecas(".BotaoEscolha",incrementoX,0)
+    this.AtualizarBotoesDasPontas()
     this.Refresh()
   }
 
@@ -304,14 +311,14 @@ class InterfaceCanvas {
     });
   }
 
-  MoverBotoesDasPecas(classeBotao,incrementoX,incrementoY){
-    let botoes = document.querySelectorAll(classeBotao)
-    botoes.forEach(function(botao) {
-      let yOriginal = parseFloat(botao.style.top.split('px')[0])
-      let xOriginal = parseFloat(botao.style.left.split('px')[0])
-      botao.style.top = (yOriginal + incrementoY) + "px"
-      botao.style.left = (xOriginal + incrementoX) + "px"
-    });
+  AtualizarBotoesDasPontas(){
+    let botoes = document.querySelectorAll(".BotaoEscolha")
+    if (botoes.length > 0){
+      let pecaPt1 = this.cadeiaDePecas.arrayPecas[0]
+      let pecaPt2 = this.cadeiaDePecas.arrayPecas[this.cadeiaDePecas.tamanho-1]
+      this.PosicionarBotaoNaPeca(pecaPt1,botoes[0])
+      this.PosicionarBotaoNaPeca(pecaPt2,botoes[1])
+    }
   }
 
 }
@@ -349,6 +356,11 @@ class CadeiaDePecas {
     this.PreencheNumeroDaPonta("ponta1")
     this.PreencheNumeroDaPonta("ponta2")
     this.tamanho = this.arrayPecas.length
+
+    this.minX = this.novaPeca.x - this.novaPeca.larg/2
+    this.maxX = this.novaPeca.x + this.novaPeca.larg/2
+    this.minY = this.novaPeca.y - this.novaPeca.alt/2
+    this.maxY = this.novaPeca.y + this.novaPeca.alt/2
   }
 
   AdicionaPeca(numero, ponta=1){
@@ -384,6 +396,7 @@ class CadeiaDePecas {
     }
 
     this.tamanho = this.arrayPecas.length
+    this.AtualizaPosicaoLimiteCadeia()
   }
 
   PreencheNumeroDaPonta(ponta){
@@ -492,6 +505,15 @@ class CadeiaDePecas {
       this.ponta2.curva = false
     }
 
+  }
+
+  AtualizaPosicaoLimiteCadeia(){
+    this.arrayPecas.forEach(function(peca){
+      if (peca.x + peca.larg/2 > this.maxX) {this.maxX = peca.x + peca.larg/2}
+      if (peca.x - peca.larg/2 < this.minX) {this.minX = peca.x - peca.larg/2}
+      if (peca.y + peca.alt/2 > this.maxY) {this.maxY = peca.y + peca.alt/2}
+      if (peca.y - peca.alt/2 < this.minY) {this.minY = peca.y - peca.alt/2}
+    }.bind(this));
   }
 
 }
