@@ -262,17 +262,17 @@ class InterfaceCanvas {
     var btn = document.createElement("button")
     document.body.appendChild(btn);
 
-    let centroCanvas_x = areaCanvas.left + this.l_canvasObj/2
-    let centroCanvas_y = areaCanvas.top - areaBody.top + this.a_canvasObj/2
+    let centroCanvas_x = areaBody.left + this.l_canvasObj/2
+    let centroCanvas_y = areaBody.top + this.a_canvasObj/2
 
     x = (x-centroCanvas_x)/escala + centroCanvas_x
     y = (y-centroCanvas_y)/escala + centroCanvas_y
 
     btn.style.position = "absolute";
-    btn.style.left = (x + areaCanvas.left - larguraPeca/escala/2) + "px";
-    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca/escala/2 + 8.5/escala) + "px";
+    btn.style.left = (x + areaCanvas.left - areaBody.left - larguraPeca/escala/2 + 8) + "px";
+    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca/escala/2 + 8.5) + "px";
     btn.style.background = "none";
-    btn.style.border ="dotted";
+    btn.style.border ="1px dotted";
     btn.style.width = larguraPeca/escala + "px";
     btn.style.height = alturaPeca/escala + "px";
     btn.style.zIndex="6";
@@ -805,33 +805,3 @@ let uiOponente = new InterfaceCanvasOponente(canvasOponeteJS,pecasOponente,uiTab
 let uiCompra = new InterfaceCanvasCompra(canvasCompra,pecasCompra,uiJogador)
 uiCompra.IniciaPilhaDeCompra()
 uiTabuleiro.Iniciar()
-
-
-const botaoCor = document.getElementById("botaoCor");
-
-botaoCor.addEventListener("click", function onClick(event){
-  const box = document.getElementById("canvasTabuleiro");
-  box.style.backgroundColor = "coral";
-});
-
-
-//   // Click and drag
-// var rect1x = rec1y;
-// var a = b;
-
-// function mouseDown(){
-//   a = document.getElementById("canvasTabuleiro").getBoundingClientRect().left;
-//   b = document.getElementById("canvasTabuleiro").getBoundingClientRect().top;
-//   rect1x = window.event.clientX - a;
-//   rect1y = window.event.clientY - b;
-// }
-
-// function mouseUp(){
-//   var rect2x = window.event.clientX - a;
-//   var rect2y = window.event.clientY - b;
-
-//   // var c=document.getElementById("canvasTabuleiro");
-//   // var ctx=c.getContext("2d");
-//   // ctx.fillStyle="#FF0000";
-//   ctx.fillRect(rect1x, rect1y, rect2x - rect1x, rect2y - rect1y);
-// }
