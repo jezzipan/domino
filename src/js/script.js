@@ -269,8 +269,8 @@ class InterfaceCanvas {
     y = (y-centroCanvas_y)/escala + centroCanvas_y
 
     btn.style.position = "absolute";
-    btn.style.left = (x + areaCanvas.left - areaBody.left - larguraPeca/escala/2 + 8) + "px";
-    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca/escala/2 + 8.5) + "px";
+    btn.style.left = (x + areaCanvas.left - areaBody.left - larguraPeca/escala/2 + 8/escala) + "px";
+    btn.style.top = (y + areaCanvas.top - areaBody.top - alturaPeca/escala/2 + 8.5/escala) + "px";
     btn.style.background = "none";
     btn.style.border ="1px dotted";
     if(ressaltarPeca){btn.style.boxShadow = "0 0 40px #ffff00"}
@@ -633,19 +633,15 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
     }
   }
 
-  AdicionaPecaNoTabuleiro(avaliacao,peca){
+  AdicionaPecaNoTabuleiro(pontaEscolhida,peca){
     let nroPecaRemovida = this.cadeiaDePecas.RemovePeca(peca)
-    this.uiTabuleiro.AdicionaPecaNoCanvas(avaliacao,nroPecaRemovida)
+    this.uiTabuleiro.AdicionaPecaNoCanvas(pontaEscolhida,nroPecaRemovida)
     if(this.cadeiaDePecas.tamanho){
       this.Refresh()
     } else {
       this.LimpaCanvas()
       this.DesenhaRetanguloAzul()
     }
-  }
-
-  AjustaPosicaoBotaoTabuleiro(){
-
   }
 
   TornarPecasResponsivas(){
