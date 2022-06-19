@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/3d43fc01e1.js" crossorigin="anonymous"></script>    
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
     <title>Procurando a Sala</title>
 
 </head>
@@ -19,27 +23,44 @@
     </div>
         <p> Procurando a sala </p>
     <div class="container">
-        <button  type="cancel" name="cancelar" onclick=""> Cancelar </button>
+        <button type="button" class="btn btn-primary" name="cancelar" (click)="expression" ng-controller=""> Cancelar </button>
     </div>
+
 </section>
-<section hidden class="sala_encontrada"> <!--Sala encontrada-->
-    <div>
-        <h4>Ebaa!!</h4>
-        <p> Uma sala foi encontrada, <br> clique em começar para jogar </p>
+    
+<!--Sala não encontrada encontrada -->
+<div class="modal fade " id="false" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true" *ngIf="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="ModalLongTitle"> Sala não encontrada </h5>
+        </div>
+        <div class="modal-body">
+            Desculpa, mas não foi possivel achar uma sala, selecione uma das opções a seguir 
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="expression"> Sair </button> 
+            <button type="button" class="btn btn-primary" (click)="expression"> Procurar </button> 
+        </div>
     </div>
-    <div class="container">
-        <button type="" onClick=""> Começar </button>
     </div>
-</section>
-<section hidden class="sala_nao_encontrada"> <!--Sala não encontrada-->
-    <div>
-        <h4 class="titulo"> Desculpa</h4>
-        <p> mas não foi possivel achar uma sala, <br> selecione uma das opções a seguir</p>
+</div>
+
+<!--Sala encontrada -->
+<div class="modal fade " id="true" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true" *ngIf="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="ModalLongTitle"> Sala encontrada! </h5>
+        </div>
+        <div class="modal-body">
+            Sala encontrada, clique em jogar para começar! 😊😊
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="expression"> Jogar </button> 
+        </div>
+        </div>
     </div>
-    <div class="container">
-        <button class="btn" name="procurar" onclick="restart"> Procurar </button>
-        <button type=""  name="sair" onclick=""> Sair </button>
-    </div>
-</section>
+</div>
 </body>
 </html>
