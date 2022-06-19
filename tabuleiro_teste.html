@@ -6,18 +6,44 @@
     <title>Tabuleiro domino</title>
     <link href="src/css/style.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet"> 
   </head>
 
   <body>
-
     <div class="container">
+      <section class="container1">
+        <div class="container2">
+      <!-- <h1 class="page-cronometro">Cronometro</h1> -->
+      
+      <h2 id="timer">15</h2>
+      
+      
+      <div class="container3">
+        <button type="button" id="start" class="startButton btn-cronometro">Start</button>
+        <!-- <button type="button" id="stop" class="btn-cronometro">Stop</button>
+        <button type="button"  id="reset" class="btn-cronometro" onclick="resetFunc() ">Reset</button> -->
+      </div>
+      
+      </section>
 
+      <div class="container">
+        <section class="container4">
+          <div class="container5">
+            <h6 id="vez">Vez de: <br/><br/>Jogador 2</h5>
+          </div>
+        </section>
+
+      </div>
+      
       <!-- Canvas da mão do oponente -->
       <canvas id="canvasOponente" width="800" height="100">
         <h3>Navegador nao possui suporte ao canvas</h3>
         <!-- Executa apenas se browser nao tiver suporte à tag canvas -->
       </canvas>
-
+      
+      
       <!-- Botoes de zoom -->
       <menu id="canvasControl">
         <button id="zoomButton" onclick="uiTabuleiro.ZoomIn(1.2);"><b>+</b></button>
