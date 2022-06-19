@@ -9,6 +9,7 @@
 		}
 	],
 	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "Telas - código"
+		"liveServer.settings.multiRootWorkspaceName": "domino",
+		"liveServer.settings.port": 5501
 	}
 }
