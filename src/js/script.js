@@ -285,7 +285,7 @@ class InterfaceCanvas {
     }
   }
 
-  CriarBotaoNaPeca(peca, classeBotao, ressaltarPeca=false,deslocHoriz=0) {
+  CriarBotaoNaPeca(peca, classeBotao, ressaltarPeca=false,deslocHoriz="0px") {
     //Cria um botao na posicao indicada
     var btn = document.createElement("button")
     document.body.appendChild(btn);
@@ -299,7 +299,7 @@ class InterfaceCanvas {
     return btn;
   }
 
-  PosicionarBotaoNaPeca(peca,btn,ressaltarPeca,deslocHoriz=0){
+  PosicionarBotaoNaPeca(peca,btn,ressaltarPeca,deslocHoriz="0px"){
     btn.disabled = false
     if(ressaltarPeca){btn.style.boxShadow = deslocHoriz + " 0 40px #ffff00"}
 
