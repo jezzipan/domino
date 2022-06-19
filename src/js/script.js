@@ -209,22 +209,12 @@ class InterfaceCanvas {
   }
 
   AjustarLimitesPlotagem(){
-    // console.log("Antes")
-    // console.log("esquerda: " + this.limiteEsquerda)
-    // console.log("direita: " + this.limiteDireita)
-    // console.log("superior: " + this.limiteSuperior)
-    // console.log("inferior: " + this.limiteInferior)
     let ajusteHorizontal = this.l_canvasObj*(this.escala_canvas -1)/2
     let ajusteVertical = this.a_canvasObj*(this.escala_canvas -1)/2
     this.limiteEsquerda = 0 - ajusteHorizontal
     this.limiteDireita = this.l_canvasObj + ajusteHorizontal
     this.limiteSuperior = 0 - ajusteVertical
     this.limiteInferior = this.a_canvasObj + ajusteVertical
-    // console.log("Depois - nova escala: " + this.escala_canvas)
-    // console.log("esquerda: " + this.limiteEsquerda)
-    // console.log("direita: " + this.limiteDireita)
-    // console.log("superior: " + this.limiteSuperior)
-    // console.log("inferior: " + this.limiteInferior)
   }
 
   ZoomOut(escala=.7){
@@ -295,26 +285,23 @@ class InterfaceCanvas {
     }
   }
 
-  CriarBotaoNaPeca(peca, classeBotao, ressaltarPeca=false) {
+  CriarBotaoNaPeca(peca, classeBotao, ressaltarPeca=false,deslocHoriz=0) {
     //Cria um botao na posicao indicada
-
     var btn = document.createElement("button")
     document.body.appendChild(btn);
-
     btn.style.background = "none";
     btn.style.border ="1px dotted";
     btn.style.zIndex="4";
-
     btn.classList.add(classeBotao)
 
-    this.PosicionarBotaoNaPeca(peca,btn,ressaltarPeca)
+    this.PosicionarBotaoNaPeca(peca,btn,ressaltarPeca,deslocHoriz)
 
     return btn;
   }
 
-  PosicionarBotaoNaPeca(peca,btn,ressaltarPeca){
+  PosicionarBotaoNaPeca(peca,btn,ressaltarPeca,deslocHoriz=0){
     btn.disabled = false
-    if(ressaltarPeca){btn.style.boxShadow = "0 0 40px #ffff00"}
+    if(ressaltarPeca){btn.style.boxShadow = deslocHoriz + " 0 40px #ffff00"}
 
     let areaCanvas = this.canvasObj.getBoundingClientRect()
     let areaBody = document.body.getBoundingClientRect()
@@ -354,13 +341,41 @@ class InterfaceCanvas {
     });
   }
 
+  CriarBotaoPonta1(){
+    let pecaPt1 = this.cadeiaDePecas.arrayPecas[0]
+    let deslocHorizPt1 = 0
+    if(this.cadeiaDePecas.tamanho<5){
+      deslocHorizPt1 = "-20px"
+    }
+    let btnPt1 = this.CriarBotaoNaPeca(pecaPt1,"BotaoEscolha", true, deslocHorizPt1)
+    return btnPt1
+  }
+
+  CriarBotaoPonta2(){
+    let pecaPt2 = this.cadeiaDePecas.arrayPecas[this.cadeiaDePecas.tamanho-1]
+    let deslocHorizPt2 = 0
+    if(this.cadeiaDePecas.tamanho<5){
+      deslocHorizPt2 = "20px"
+    }
+    let btnPt2 = this.CriarBotaoNaPeca(pecaPt2,"BotaoEscolha", true, deslocHorizPt2)
+    return btnPt2
+  }
+
   AtualizarBotoesDasPontas(){
     let botoes = document.querySelectorAll(".BotaoEscolha")
     if (botoes.length > 0){
       let pecaPt1 = this.cadeiaDePecas.arrayPecas[0]
       let pecaPt2 = this.cadeiaDePecas.arrayPecas[this.cadeiaDePecas.tamanho-1]
-      this.PosicionarBotaoNaPeca(pecaPt1,botoes[0],true)
-      this.PosicionarBotaoNaPeca(pecaPt2,botoes[1],true)
+
+      let deslocHorizPt1 = 0
+      let deslocHorizPt2 = 0
+      if(this.cadeiaDePecas.tamanho<5){
+        deslocHorizPt1 = "-20px"
+        deslocHorizPt2 = "20px"
+      }
+
+      this.PosicionarBotaoNaPeca(pecaPt1,botoes[0],true,deslocHorizPt1)
+      this.PosicionarBotaoNaPeca(pecaPt2,botoes[1],true,deslocHorizPt2)
     }
   }
 
@@ -761,12 +776,10 @@ class InterfaceCanvasJogador extends InterfaceCanvas {
           //alert("Falta implementar lógica para quando peça entra nas duas pontas")
 
           this.LimparBotoesDasPecas(".BotaoNaPeca")
+          alert("Escolha uma das pontas para adicionar a peça")
 
-          let pecaPt1 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[0]
-          let pecaPt2 = this.uiTabuleiro.cadeiaDePecas.arrayPecas[this.uiTabuleiro.cadeiaDePecas.tamanho-1]
-
-          let botaoPt1 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt1,"BotaoEscolha", true)
-          let botaoPt2 = this.uiTabuleiro.CriarBotaoNaPeca(pecaPt2,"BotaoEscolha", true)
+          let botaoPt1 = this.uiTabuleiro.CriarBotaoPonta1()
+          let botaoPt2 = this.uiTabuleiro.CriarBotaoPonta2()
 
           botaoPt1.onclick = function(){
             this.uiTabuleiro.LimparBotoesDasPecas(".BotaoEscolha")
